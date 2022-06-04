@@ -18,6 +18,9 @@ Home productos con Filtro:
 Home producto con Barra Busqueda:
 ![image](https://user-images.githubusercontent.com/101838235/172025933-764cf9d4-2510-4afc-8abf-fded781ee65c.png)
 
+SideBar:
+![image](https://user-images.githubusercontent.com/101838235/172026065-63a776fc-024a-4e12-bdb5-0a419d1d6a50.png)
+
 Crud:
 ![image](https://user-images.githubusercontent.com/101838235/172025807-9e4a0ce4-eea0-40e3-884d-ec1546e4150d.png)
 
