@@ -1,0 +1,75 @@
+{% load static %}
+{% load humanize %}
+<!-- NAVBAR -->
+<!--- Para navegar entre diferentes enlaces se usa href ="{#% url 'nombreEnlace' %}" sin el # -->
+<!-- si se quiere usar MODAL en la barra, quitar el  sticky-top -->
+<div class="d-flex navbar sticky-top shadow bg-light col-12 " >  <!---id="navbar"--->
+
+    <!-- LOGO -->
+    <div class="col-md-8 d-flex">
+        <a href="{% url 'home' %}"><img src="{% static 'web/img/pedidocomida_logo3.png' %}" class="logo"/></a>
+    </div>
+
+    <!-- PERFIL -->
+    <div class="col-md-4 d-flex justify-content-end">
+
+        <!-- si está registrado que salga el menu y la sidebar -->
+        {% if user.is_authenticated %}
+        <!---SIDEBAR-->
+        <!-- The overlay -->
+        <div id="myNav" class="overlay">
+        
+            <!-- Overlay content -->
+            <div class="overlay-content ">
+                <div id="mySidepanel" class="sidebar-content" data-sidebar>
+                    <!-- Button to close the overlay navigation -->
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+                    <!--- contenido del sidebar-->
+                    <div class="d-inline ">
+                        <h4 class="profile-name d-inline "><i class="bi bi-at"></i>{{ user.username }}</h4>
+                    </div> 
+                    <hr>
+                    <a href="{% url 'home' %}"><i class="bi bi-house"></i> Inicio</a>
+                    <hr>
+                    <a href="{% url 'perfil_usuario' %}"><i class="bi bi-person-circle"></i> Opciones Perfil</a>
+                    <a href="{% url 'carrito_compras' %}"><i class="bi bi-cart3"></i> Carrito Compras</a>
+                    <a href="{% url 'favoritos' %}"><i class="bi bi-heart-fill"></i> Favoritos</a>
+                    {% if perms.web.view_producto %}
+                    <hr>
+                    <a href="{% url 'listar_productos' %}"><i class="bi bi-card-list"></i> Lista de Platos</a>
+                    {% endif %}
+                    {% if perms.web.add_producto %}
+                    <a href="{% url 'agregar_producto' %}"><i class="bi bi-save"></i> Agregar Platos</a>
+                    {% endif %}
+                    <hr>
+                    <a href="{% url 'logout' %}"><i class="bi bi-power"></i> Cerrar Sesión</a>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            
+            <!---dejar esto porque funciona el overlay-->
+            <!---<div id="mySidepanel" class="sidepanel">-->
+                <!--- aqui iba el boton pa cerrrar-->
+            <!---</div>-->
+            
+            <!---tiene un bug al entrar en pantalla completa f11, solo una parte se puede clickear-->
+            <button class="btn btn-sidebar" data-sidebar-button id="btn-sidebar" onclick="openNav()" >&#9776; Cuenta Usuario</button>
+        </div>
+    
+        {% else %}
+        <!-- si no está registrado que salgan los botones | los botones no tienen problema, solo es sintaxis de django en html -->
+        <div>
+            <button onclick="location.href='{% url 'login' %}'" type="button" class="btn btn-success">
+                Iniciar Sesión</button>
+            <button onclick="location.href='{% url 'registro' %}'" type="button" class="btn btn-primary">
+                Registrarse</button>
+        </div>
+        {% endif %}
+
+        &nbsp; &nbsp; &nbsp;
+    </div>
+</div>

@@ -1,0 +1,155 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'web/css/images.css' %}">
+{% endblock %}
+{% block js %}
+{% endblock %}
+{% block contenido %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+<!---contenido-->
+<br><br>
+<div class="card">
+    <div class="card-body">
+        <h1 class="text-center">Pago</h1>
+        <hr>
+        <div class="row justify-content-center ">
+            <div class="col-md-2 p-lg-5 justify-content-start card">
+                <!--- BOTONES Metodo de pago -->
+                <h5 class="text-center">Cancelar con:</h5>
+                <br>
+                <div class="btn-group btn-group-toggle row" data-toggle="buttons" id="metodo_pago">
+                    {% if pedido.metodo_pago.id == 1 %}
+                    <label class="btn btn-outline-danger active p-4">
+                        <input type="radio" name="metodo_pago" id="option1" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '1' %}'" checked> 
+                        <i class="bi bi-piggy-bank" style="font-size: 2rem;"></i> <h5>Saldo</h5></label>
+                    <label class="btn btn-outline-danger">
+                        <input type="radio" name="metodo_pago" id="option2" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '2' %}'"> 
+                        <i class="bi bi-credit-card"></i> Débito</label>
+                    <label class="btn btn-outline-danger">
+                        <input type="radio" name="metodo_pago" id="option3" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '3' %}'"> 
+                        <i class="bi bi-cash"></i> Efectivo</label>
+                    {% elif pedido.metodo_pago.id == 2 %}
+                    <label class="btn btn-outline-danger">
+                        <input type="radio" name="metodo_pago" id="option1" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '1' %}'"> 
+                        <i class="bi bi-piggy-bank"></i> Saldo</label>
+                    <label class="btn btn-outline-danger active p-4">
+                        <input type="radio" name="metodo_pago" id="option2" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '2' %}'" checked> 
+                        <i class="bi bi-credit-card" style="font-size: 2rem;"></i> <h5>Débito</h5></label>
+                    <label class="btn btn-outline-danger">
+                        <input type="radio" name="metodo_pago" id="option3" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '3' %}'"> 
+                        <i class="bi bi-cash"></i> Efectivo</label>
+                    {% elif pedido.metodo_pago.id == 3 %}
+                    <label class="btn btn-outline-danger">
+                        <input type="radio" name="metodo_pago" id="option1" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '1' %}'"> 
+                        <i class="bi bi-piggy-bank"></i> Saldo</label>
+                    <label class="btn btn-outline-danger">
+                        <input type="radio" name="metodo_pago" id="option2" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '2' %}'"> 
+                        <i class="bi bi-credit-card"></i> Débito</label>
+                    <label class="btn btn-outline-danger active p-4">
+                        <input type="radio" name="metodo_pago" id="option3" autocomplete="off" 
+                        onclick="location.href='{% url 'pedido_metodo_pago' '3' %}'" checked> 
+                        <i class="bi bi-cash" style="font-size: 2rem;"></i> <h5>Efectivo</h5></label>
+                    {% endif %}
+                </div>
+
+            </div>
+            <div class="col-md-7 p-lg-5 justify-content-start card">
+                {% if pedido.metodo_pago.id == 1 %}
+                <div class="SALDO text-center card">
+                    <h2 class="align-middle card-body">Saldo: ${{ cliente.saldo | intcomma }}</h2>
+                    <h5 class="align-middle">Subtotal: ${{ pedido.subtotal  | intcomma }}</h5>
+                    <h5 class="align-middle">Envio: ${{ pedido.costo_envio  | intcomma }}</h5>
+                    <h2 class="align-middle">Total: ${{ pedido.total  | intcomma }}</h2>
+                </div>
+                {% elif pedido.metodo_pago.id == 2 %}
+                <div class="DEBITO text-center card">
+                    <h2 class="align-middle">Total: ${{ pedido.total  | intcomma }}</h2>
+                </div>
+                {% elif pedido.metodo_pago.id == 3 %}
+                <div class="EFECTIVO text-center card">
+                    <br>
+                    <h6 class="align-middle">Su pedido debe ser cancelado en efectivo.</h6>
+                    <hr>
+                    <h2 class="align-middle">Total: ${{ pedido.total  | intcomma }}</h2>
+                </div>
+                {% endif %}
+                <hr>
+                <div class="productosCompra card ">
+                    <table class="card-body table table-striped table-hover table-responsive-sm">
+                        {% for p in productos %}
+                            {% for d in pedido_detalle %}
+                                {% if d.producto.id == p.id %}
+                                <tr>
+                                    <td><div class="img-rounded-container">
+                                        <img class="img-fluid mini-rounded-img" src="{{ p.imagen.url }}" alt=""></div>
+                                    </td>
+                                    <td class="align-middle">{{ p.nombre | title }}</td>
+                                    <td class="align-middle">x{{ d.cantidad_producto }}</td>
+                                    <td class="align-middle">${{ p.precio | intcomma }}</td>
+                                    <td class="align-middle">{{ p.restaurant | title }}</td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </table>
+                </div>
+                <br>
+                <div class="botonesPago row mx-sm-5">
+                    <a href="{% url 'carrito_compras' %}" id="submit" 
+                    class="btn btn-outline-danger btn-lg w-50 p-2 " 
+                    name="btn-carrito">Volver al Carrito</a>
+                    <a href="{% url 'confirmacion_pedido' %}" onclick="pedidoExitoso()" 
+                    id="submit" class="btn btn-outline-success btn-lg w-50 p-2 " 
+                    >Confirmar Compra</a>
+                </div>
+                <hr>
+                <div class="SOLO_PARA_DEBUG">
+                    <h4>DEBUG MODE</h4>
+                    <hr>
+                    <h5> DB PEDIDO </h5>
+                    <h6>cliente: {{ pedido.cliente }}</h6>
+                    <h6>codigo: {{ pedido.codigo }}</h6>
+                    <h6>metodo_pago: {{ pedido.metodo_pago }}</h6>
+                    <h6>es_envio_domicilio: {{ pedido.es_envio_domicilio }}</h6>
+                    <h6>costo_envio: {{ pedido.costo_envio }}</h6>
+                    <h6>subtotal: {{ pedido.subtotal }}</h6>
+                    <h6>total: {{ pedido.total }}</h6>
+                    <h6>num_productos: {{ pedido.num_productos }}</h6>
+                    <h6>fecha_compra: {{ pedido.fecha_compra }}</h6>
+                    <h6>pagado: {{ pedido.pagado }}</h6>
+                    <h6>tiempo_entrega_est: {{ pedido.tiempo_entrega_est }}</h6>
+                    <h6>fecha_entrega_estimada: {{ pedido.fecha_entrega_estimada }}</h6>
+                    <h6>es_programado: {{ pedido.es_programado }}</h6>
+                    <h6>fecha_programada: {{ pedido.fecha_programada }}</h6>
+                    <h6>fecha_entregado: {{ pedido.fecha_entregado }}</h6>
+                    <h6>entregado: {{ pedido.entregado }}</h6>
+                    <hr>
+                    <h5> DB CARRITO </h5>
+                    <h6>cliente: {{ carrito.cliente }}</h6>
+                    <h6>codigo: {{ carrito.codigo }}</h6>
+                    <h6>numero_productos: {{ carrito.numero_productos }}</h6>
+                    <h6>descuento: {{ carrito.descuento }}</h6>
+                    <h6>subtotal: {{ carrito.subtotal }}</h6>
+                    <h6>total: {{ carrito.total }}</h6>
+                    <h6>es_envio_domicilio: {{ carrito.es_envio_domicilio }}</h6>
+                    <h6>costo_envio: {{ carrito.costo_envio }}</h6>
+                    <h6>tiempo_entrega_estimado: {{ carrito.tiempo_entrega_estimado }}</h6>
+                    <h6>fecha_entrega_estimada: {{ carrito.fecha_entrega_estimada }}</h6>
+                    <h6>es_programado: {{ carrito.es_programado }}</h6>
+                    <h6>fecha_programada: {{ carrito.fecha_programada }}</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

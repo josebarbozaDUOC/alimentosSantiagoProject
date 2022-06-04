@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Static Example</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+  <!-- XDSoft DateTimePicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    {{ form.fecha_programada }}
+
+    <!--
+    <input id="datetimepicker" type="text">
+    <input id="datepicker" type="text">
+    <input id="timepicker" type="text">
+    -->
+
+  <script>
+    $(function () {
+        $("#id_fecha_programada").datetimepicker({
+            inline:true,
+            dayOfWeekStart: '1',
+            minDate:'0',            //el minimo es hoy
+            maxDate:'+1970/02/01',  //el maximo es en un mes
+            maxTime: '21:00',
+            step:10,
+            format: 'D d/M/Y H:i'  
+        });
+
+        $("#datetimepicker").datetimepicker({
+            inline:true,
+            dayOfWeekStart: '1',
+            minDate:'0',            //el minimo es hoy
+            maxDate:'+1970/02/01',  //el maximo es en un mes
+            maxTime: '21:00',
+            step:10,
+            format: 'D d/M/Y H:i'  
+        });
+        $("#datepicker").datetimepicker({
+            timepicker:false,
+            inline:true,
+            minDate:'0',            //el minimo es hoy
+            maxDate:'+1970/02/01',  //el maximo es en un mes
+            format: 'D d/M/Y'  
+        });
+        $("#timepicker").datetimepicker({
+            datepicker:false,
+            inline:true,
+            minTime: '07:00',
+            maxTime: '21:00',
+            format: 'H:i'  
+        });
+    });
+
+    $(document).ready(function () {  
+        jQuery.datetimepicker.setLocale('es');  
+    });  
+  </script>
+
+</body>
+</html>

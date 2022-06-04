@@ -1,0 +1,26 @@
+/*# estando en la ruta de la carpeta alimentosSantiagoWeb*/
+
+# echar a andar el server y la pagina
+python manage.py runserver
+
+# para cuando se hacen cambios en los models
+python manage.py makemigrations
+python manage.py migrate  
+
+# para crear un super user, como un admin
+python manage.py createsuperuser
+
+# para instalar varios plugins de una
+pip install -r requirements.txt 
+
+#agrandar un icono bootstrap, agregar:
+style="font-size: 2rem;"
+
+#----------------------------------
+    #dentro de una clase model
+    #NO ES NECESARIO USARLA clase para crear un carrito
+    @classmethod
+    def create(cls, cliente, producto,cantidad_producto,subtotal):
+        carrito = cls(cliente=cliente, producto=producto,cantidad_producto=cantidad_producto,subtotal=subtotal)
+        # do something with the object
+        return carrito

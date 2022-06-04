@@ -1,0 +1,7 @@
+1,Envio hasta 200 mts,Envio muy cercano: A menos de 200 mts,15,600
+2,Envio hasta 500 mts,Envio cerca: A menos de 500 mts,20,800
+3,Envio hasta 1000 mts,Envio relativamente cerca: A menos de 1 km,25,900
+4,Envio hasta 2000 mts,Envio medianamente lejos: A menos de 2 km,30,1000
+5,Envio hasta 5000 mts,Envio lejano: A menos de 5 km,45,1500
+6,Envio hasta 8000 mts,Envio muy lejano: A no más de 9 km,60,2000
+7,Envio a cuenta de la casa,Envio  a costo cero para el cliente,30,0

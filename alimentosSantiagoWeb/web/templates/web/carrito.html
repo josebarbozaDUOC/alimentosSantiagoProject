@@ -1,0 +1,257 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'web/css/carrito.css' %}">
+<link rel="stylesheet" href="{% static 'web/css/checkbox.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'web/js/boolactivebtn.js' %}"></script>
+<!-- jQuery ya existe en base-->
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+<!-- XDSoft DateTimePicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+<script src="{% static 'web/js/calendario.js' %}"></script>
+{% endblock %}
+
+{% block contenido %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+<!---contenido-->
+
+<br><br>
+<div class="card">
+    <div class="card-body">
+        <h1 class="text-center">Carrito de compras</h1>
+        <hr>
+        <br>
+        <!---si NO HAY producto en el carrito-->
+        {% if not productos_carrito %}
+        <div class="col carrito-vacio">
+            <div class="carrito-img-container">
+                <a href="{% url 'home' %}"><img src="{% static 'web/img/dishImg_sm.png' %}" class="carrito-img" alt=""></a>
+            </div>
+            <br>
+            <h2 class="text-center">Tu carrito está vacío</h2>
+            <h4 class="text-center">Los mejores platos están esperando</h4>
+            <br>
+        </div>
+        {% else %}
+        <!---SI HAY producto en el carrito-->
+        <div class="row justify-content-center">
+
+            <!---SE MUESTRAN LOS PROD DEL CARRITO -->
+            <div class="col-md-7 card ">
+                <div class="row menu platos ">
+    
+                    <!---doble loop para acceder a ambas tablas filtradas-->
+                    {% for p in productos %}
+                        {% for c in productos_carrito %}
+                            {% if c.producto.id == p.id %}
+    
+                            <div class="col-md-3 card plato m-2 animate__animated animate__zoomIn">
+    
+                                <div class="contenedor_plato">
+                                    <hr>
+                                    <div class="plato_imagen">
+                                        {% if p.imagen %}
+                                        <img class="card-img-top img-fluid" src="{{ p.imagen.url }}" alt="">
+                                        {% else %}
+                                        <img class="card-img-top img-fluid" src="{% static 'web/img/placeholder.jpg' %}" alt="">
+                                        {% endif %}
+                                    </div>
+    
+                                    <div class=" card-body detalle"> 
+                                        <h6>{{ p.restaurant | capfirst }}</h6>
+                                        <h4>{{ p.nombre | title }}</h4>
+                                        <h5>${{ p.precio | intcomma }}</h5>
+                                        <hr>
+                                        <div class="row">
+                                            <h5 class="col">Cantidad:</h5>
+                                            <div class="col">
+                                                {% if c.cantidad_producto > 1 %}
+                                                <a href="{% url 'restar_cantidad' p.id %}" id="submit" 
+                                                class="btn btn-danger" name="btn-carrito"><i class="bi bi-dash-lg"></i></a>
+                                                {% else %}
+                                                <a href="{% url 'restar_cantidad' p.id %}" id="submit" 
+                                                class="btn btn-danger disabled" name="btn-carrito"><i class="bi bi-dash-lg"></i></a>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col card"><h4>{{ c.cantidad_producto | title }}</h4></div>
+                                            <div class="col">
+                                                <a href="{% url 'sumar_cantidad' p.id %}" id="submit" 
+                                                class="btn btn-success " name="btn-carrito"><i class="bi bi-plus-lg"></i></a>
+                                            </div>
+                                        </div>
+                                        <br>
+
+
+                                        <h5>Subtotal: ${{ c.subtotal | intcomma }}</h5>
+    
+                                        <!---BTN ELIMINAR ESTE PRODUCTO DEL CARRITO-->
+                                        <!---quizas que al eliminar pida confirmar y sale un btn baje este-->
+                                        <a href="{% url 'eliminar_producto_carrito' p.id %}" id="submit" 
+                                        class="btn btn-outline-danger w-100 p-2 btn-carrito" 
+                                        name="btn-carrito"><i class="bi bi-trash3-fill"></i> Eliminar del carrito</a>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    
+                </div>
+            </div>
+    
+            <!--- BOLETA  -->
+            <div class="col-md-2  card text-center boleta">
+                <br>
+                <h6>Tipo despacho:</h6>
+                <div class="btn-group btn-group-toggle " data-toggle="buttons" id="boolenvio">
+
+                    {% if not carrito.es_envio_domicilio %}
+                    <input type="radio" class="btn-check form-check-input" name="options3" 
+                    id="option3" autocomplete="off" value="option1" 
+                    onclick="location.href='{% url 'opciones_pedido' 'False' %}'" checked>
+                    <label class="form-check-label btn btn-outline-danger active" for="option3">
+                        <i class="bi bi-shop col"></i> <h6 class="col">Retiro en Tienda</h6>
+                    </label>
+
+                    <input type="radio" class="btn-check form-check-input" name="options3" 
+                    id="option4" autocomplete="off" value="option2" 
+                    onclick="location.href='{% url 'opciones_pedido' 'True' %}'">
+                    <label class="form-check-label btn btn-outline-danger" for="option4">
+                        <i class="bi bi-truck col"></i> <h6 class="col">Envio a domicilio</h6>
+                    </label>
+
+                    {% else %}
+                    <input type="radio" class="btn-check form-check-input" name="options3" 
+                    id="option3" autocomplete="off" value="option1" 
+                    onclick="location.href='{% url 'opciones_pedido' 'False' %}'">
+                    <label class="form-check-label btn btn-outline-danger" for="option3">
+                        <i class="bi bi-shop col"></i> <h6 class="col">Retiro en Tienda</h6>
+                    </label>
+
+                    <input type="radio" class="btn-check form-check-input" name="options3" 
+                    id="option4" autocomplete="off" value="option2" 
+                    onclick="location.href='{% url 'opciones_pedido' 'True' %}'" checked>
+                    <label class="form-check-label btn btn-outline-danger active" for="option4">
+                        <i class="bi bi-truck col"></i> <h6 class="col">Envio a domicilio</h6>
+                    </label>
+                    {% endif %}
+                </div>
+
+                <hr>
+
+                <h6>Envio programado:</h6>
+                <div class="btn-group btn-group-toggle " data-toggle="buttons" id="boolprogramado">
+                    
+                    {% if not carrito.es_programado %}
+                    <input type="radio" class="btn-check form-check-input" name="options4" 
+                    id="option5" autocomplete="off" value="option1" 
+                    onclick="location.href='{% url 'pedido_programado' 'False' %}'" checked>
+                    <label class="form-check-label btn btn-outline-danger active" for="option5">
+                        <i class="bi bi-x-lg col"></i> No</label>
+
+                    <input type="radio" class="btn-check form-check-input" name="options4" 
+                    id="option6" autocomplete="off" value="option2"
+                    onclick="location.href='{% url 'pedido_programado' 'True' %}'">
+                    <label class="form-check-label btn btn-outline-danger" for="option6">
+                        <i class="bi bi-check-lg col"></i> Sí</label>
+                    {% else %}
+
+                    <input type="radio" class="btn-check form-check-input" name="options4" 
+                    id="option5" autocomplete="off" value="option1" 
+                    onclick="location.href='{% url 'pedido_programado' 'False' %}'">
+                    <label class="form-check-label btn btn-outline-danger" for="option5">
+                        <i class="bi bi-x-lg col"></i> No</label>
+
+                    <input type="radio" class="btn-check form-check-input" name="options4" 
+                    id="option6" autocomplete="off" value="option2"
+                    onclick="location.href='{% url 'pedido_programado' 'True' %}'" checked>
+                    <label class="form-check-label btn btn-outline-danger active" for="option6">
+                        <i class="bi bi-check-lg col"></i> Sí</label>
+                    {% endif %}
+                </div>
+
+                {% if carrito.es_programado %}
+                <br>
+
+                <h6>Elegir fecha:</h6>
+                <!-- MODAL BTN FECHA -->
+                <div class="col-6 mx-auto">
+                    <button type="button" class="btn btn-outline-danger btn-lg " 
+                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="bi bi-calendar3" style="font-size: 2rem;"></i></button>
+                </div>
+                <!-- MODAL FORM FECHA -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Elegir Fecha</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Formulario fecha programada -->
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                {{ form.fecha_programada }}
+                                <hr>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <input type="submit" value="Confirmar Fecha" class="btn btn-primary p-2">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <br>
+                <h5>Envio programado para el: </h5>
+                <h5>{{ carrito.fecha_programada }}</h5>
+                <hr>
+                <h5>hora entrega estimada</h5>
+                <h5>{{ carrito.fecha_entrega_estimada }}</h5>
+                {% else %}
+                <!--- SI EL ENVIO NO ES PROGRAMADO, QUIERE DECIR
+                    QUE SE DEBE ENTREGAR AHORA + 30MIN 
+                    si es envio domi, pero si es retiro tienda, son +10 min--->
+                <br>
+                <h6>Su pedido estará listo: </h6>
+                <h4>Para {{ dia_entrega_est }} a las {{ hora_entrega_est }}</h4>
+                <hr>
+                <h5>hora entrega estimada</h5>
+                <h5>{{ carrito.fecha_entrega_estimada }}</h5>
+                <hr>
+                <h5>Envio programado para el: </h5>
+                <h5>{{ carrito.fecha_programada }}</h5>
+                {% endif %}
+
+                <hr>
+                <h5>{{ carrito.numero_productos | title }} Productos</h5>
+                <h5>Subtotal: ${{ carrito.subtotal | intcomma }}</h5>
+                <hr>
+                <h5>Envio:    ${{ carrito.costo_envio | intcomma }}</h5>
+                <hr>
+                <h3 class="font-weight-bold">Total:    ${{ carrito.total | intcomma }}</h3>
+                <hr>
+                <!---
+                <input type="submit" value="Ir a Pagar" 
+                class="btn btn-outline-danger w-100 p-2 btn-carrito btn-lg" >
+                -->
+                <a href="{% url 'pagar' %}" id="submit" type="submit"
+                    class="btn btn-outline-danger w-100 p-2 btn-carrito btn-lg" 
+                    name="btn-carrito">Ir a Pagar</a>
+                <br>
+            </div>
+        </div>
+        <hr>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'web/css/catbtnclick.css' %}">
+{% endblock %}
+{% block js %}
+<script src="{% static 'web/js/catbtnclick.js' %}"></script>
+{% endblock %}
+{% block contenido %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+<!-- CONTENIDO CENTRAL -->
+<div class="col-md-10 d-flex offset-md-1"> <!---puede ser solo col-12-->
+
+    <!---agregar las categorias, restaurants y filtros-->
+    <div class=" content-section" id="contenido">
+
+        <div class="categorias" id="categoriascontainer">
+            <a href="{% url 'home' %}" id="submit btncat" onclick="myFunction()" class="btn btn-outline-danger btn-lg target" name="btn-categoria" ><i class="bi bi-house-fill"></i></a>
+            {% for cat in categorias %}
+            <a href="{% url 'filtro' cat.id %}" id="submit btncat" onclick="myFunction()" class="btn btn-outline-danger btn-lg target" name="btn-categoria">{{ cat | capfirst }}</a>
+            {% endfor %}
+        </div>
+        <br>
+
+        <!---los recomendados solo debiesen ser unos cuantos platos en un carousel
+        luego abajo vendria el listado de todos los platos-->
+        {% if not categoria %}
+        <div>
+            <h1 class="animate__animated animate__lightSpeedInLeft">El Chef Recomienda</h1>
+        </div>
+        {% else %}
+        <div>
+            <h1 class="animate__animated animate__lightSpeedInLeft">{{ categoria | capfirst }}</h1>
+        </div>
+        {% endif %}
+
+        <div class="row menu platos ">
+
+            {% for p in entity %}
+
+            <div class="col-md-3 card plato mb-4 animate__animated animate__zoomIn " id="plato">
+
+                <div class="contenedor_plato ">
+                    <hr>
+                    <!---agregar el icono de favoritos, con su funcionalidad-->
+                    <div class="plato_imagen">
+                        {% if p.imagen %}
+                        <img class="card-img-top img-fluid" src="{{ p.imagen.url }}" alt="">
+                        {% else %}
+                        <img class="card-img-top img-fluid" src="{% static 'web/img/placeholder.jpg' %}" alt="">
+                        {% endif %}
+                    </div>
+
+                    <div class=" card-body detalle"> 
+                        <h6>{{ p.restaurant | capfirst }}</h6>
+                        <h4>{{ p.nombre | title }}</h4>
+                        <h5>${{ p.precio | intcomma }}</h5>
+                    </div>
+
+                    <a href="{% url 'agregar_a_carrito' p.id %}" id="submit" class="btn btn-outline-danger w-100 p-2 btn-carrito" name="btn-carrito">Agregar al carrito</a>
+                    <hr>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+        <hr>
+        <div class="paginator">
+            {% include 'web/paginator.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

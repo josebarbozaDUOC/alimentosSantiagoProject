@@ -1,0 +1,132 @@
+<!--- Hereda la navbar y el footer de base.html -->
+{% extends 'web/base.html' %}
+{% load static %}
+{% block css %}
+    <!--- css -->
+{% endblock %}
+{% block js %}
+    <!--- js -->
+    <!--<script src="{% static 'web/js/platostimer.js' %}"></script>-->
+{% endblock %}
+
+<!--- Desde acá comienza el contenido de la pagina -->
+{% block contenido %}
+{% load humanize %}
+
+<br><br>
+
+<div class="row justify-content-center">
+    <div class="">
+
+        <!-- BARRA LATERAL IZQUIERDA -->
+        <!---
+        <div class="col-md-1 d-flex">
+            <div class="sidebar-item">
+                <div class="make-me-sticky">
+                </div>
+            </div>
+        </div>--->
+
+
+        <div class="">
+            <!-- CONTENIDO CENTRAL -->
+            <div class="col-md-10 offset-md-1"> <!---puede ser solo col-12-->
+
+                <!---agregar las categorias, restaurants y filtros-->
+                <div class="container content-section" id="contenido">
+
+                    <!--- Busqueda -->
+                    <div>
+                        <form method="GET" action="{% url 'home' %}" >
+                            <div class="input-group mb-3 w-auto">
+                                <span class="input-group-text rounded-pill" id="basic-addon1">
+                                    <i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control form-control-lg rounded-pill" 
+                                    placeholder="Busqueda..." aria-label="Search" 
+                                    aria-describedby="basic-addon1" name="q">
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+
+                    <div class="categorias" id="categoriascontainer">
+                        <a href="{% url 'home' %}" id="submit btncat" onclick="myFunction()" 
+                        class="btn btn-outline-danger btn-lg target" name="btn-categoria" >
+                        <i class="bi bi-house-fill"></i></a>
+
+                        {% for cat in categorias %}
+                        <a href="{% url 'home' %}?qc={{cat}}" id="submit btncat" onclick="myFunction()" 
+                        class="btn btn-outline-danger btn-lg target" 
+                        name="btn-categoria">{{ cat | capfirst }}</a>
+                        {% endfor %}
+                    </div>
+                    <br>
+
+                    <!---los recomendados solo debiesen ser unos cuantos platos en un carousel
+                    luego abajo vendria el listado de todos los platos-->
+                    {% if categoria %}
+                    <div>
+                        <h1 class="animate__animated animate__lightSpeedInLeft">{{ categoria | capfirst }}</h1>
+                    </div>
+                    {% else %}
+                    <div>
+                        {% if se_busca %}
+                            {% if num_prods == 1 %}
+                            <h4>Se encontró {{ num_prods }} producto para "{{ filtro }}"</h4>
+                            {% else %}
+                            <h4>Se encontraron {{ num_prods }} productos para "{{ filtro }}"</h4>
+                            {% endif %}
+                        <br>
+                        {% else %}
+                        <h1 class="animate__animated animate__lightSpeedInLeft">El Chef Recomienda</h1>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 menu text-center">
+                        {% for p in entity %}
+                        <div class="platos pb-4 animate__animated animate__zoomIn" id="plato">
+                            <div class="col plato card">
+                                <!---agregar el icono de favoritos, con su funcionalidad-->
+                                <div class="plato_imagen">
+                                    {% if p.imagen %}
+                                    <img class="card-img-top img-fluid" src="{{ p.imagen.url }}" alt="">
+                                    {% else %}
+                                    <img class="card-img-top img-fluid" src="{% static 'web/img/placeholder.jpg' %}" alt="">
+                                    {% endif %}
+                                </div>
+
+                                <div class=" card-body detalle"> 
+                                    <h6>{{ p.restaurant | capfirst }}</h6>
+                                    <h4>{{ p.nombre | title }}</h4>
+                                    <h5>${{ p.precio | intcomma }}</h5>
+                                </div>
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'agregar_a_carrito' p.id %}" id="submit" class="btn btn-outline-danger w-100 p-2 btn-carrito" name="btn-carrito">Agregar al carrito</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                    </div>
+                    <hr>
+                    <div class="paginator">
+                        {% include 'web/paginator.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- BARRA LATERAL DERECHA -->
+        <!---
+        <div class="col-md-1 d-flex">
+            <div class="sidebar-item">
+                <div class="make-me-sticky">
+                </div>
+            </div>
+        </div>-->
+
+    </div>
+</div>
+{% endblock %}

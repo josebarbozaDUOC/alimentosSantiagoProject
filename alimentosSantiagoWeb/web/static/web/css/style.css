@@ -1,0 +1,116 @@
+body{
+    background-color:rgb(255, 250, 250);
+    /*overflow: hidden;*/
+}
+.contenedor{
+    min-height: 770px;
+}
+footer{
+    background-color:rgb(218, 86, 86);
+    width: 100%;
+    margin:auto;
+    text-align: center;
+    color: antiquewhite;
+    padding: 5px;
+}
+
+.card{
+    /*background-color: transparent;*/
+    background-color: white;
+}
+
+/*LOGO: medidas y posición*/
+.logo{
+    width:300px ;
+    height:30px;
+    padding: 0 30px;
+}
+.profile-name{
+    font-family:'Courier New', Courier, monospace;
+    color: rgb(3, 3, 3);
+    font-size: 24px;
+}
+.profile{
+    width: 30px ;
+    height: 30px ;
+}
+.nav{
+    display: flex;
+}
+.navegacion {
+    float: right;
+    display: contents;
+    width: 100%;
+}
+
+
+#contenido {
+    width: 100%;
+    margin:auto;
+    max-width: 1280px;
+    min-height: 100vh;
+}
+
+.platos {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.plato {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    
+}
+.plato_imagen {
+    width: 100%;
+    height: 100%;/*
+    border: 1px solid red;
+    box-sizing: border-box;*/
+}
+
+.plato img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /*box-sizing: border-box;*/
+    border-radius: 5%;
+}
+
+
+.plato .detalle {
+    padding: 5px;
+}
+
+.btn-carrito{
+    float: inline-end;
+    left: 0%;
+    bottom: 0%;
+}
+
+.paginator a{
+    border-radius: 5px;
+}
+
+/*laterales sticky: se pegan*/
+/*.sidebar-section {
+    height: 100%;
+    width: 100%;
+}
+.sidebar-item {
+	position: absolute;
+    top: 0;
+	width: 100%;
+	height: 100%;
+    display: block;
+    justify-content: left;
+    justify-items: left;
+}
+.make-me-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    padding-top: 60px;
+    text-align: left;
+    justify-content: left;
+    justify-items: left;
+}*/
+
