@@ -1,7 +1,12 @@
-/*# estando en la ruta de la carpeta alimentosSantiagoWeb*/
+/*# Ir a la carpeta del proyecto usando la consola de comandos:*/
+cd alimentosSantiagoWeb
 
-# echar a andar el server y la pagina
+/*# estando en la ruta de la carpeta alimentosSantiagoWeb*/
+/*# echar a andar el server y la pagina*/
 python manage.py runserver
+
+
+#-------------------------------------------------
 
 # para cuando se hacen cambios en los models
 python manage.py makemigrations
