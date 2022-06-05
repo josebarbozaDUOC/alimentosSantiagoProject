@@ -62,16 +62,13 @@ footer{
 }
 .plato_imagen {
     width: 100%;
-    height: 100%;/*
-    border: 1px solid red;
-    box-sizing: border-box;*/
+    height: 15rem;
 }
 
 .plato img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /*box-sizing: border-box;*/
     border-radius: 5%;
 }
 
