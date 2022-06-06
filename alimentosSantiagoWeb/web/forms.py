@@ -41,8 +41,7 @@ class ProductoForm(forms.ModelForm):
             "fecha_publicacion": forms.SelectDateWidget()
             #"disponible": forms.CheckboxInput()
         }'''
-        
-#class DateForm(forms.ModelForm):
+
 class CarritoForm(forms.ModelForm):
     fecha_programada = forms.DateTimeField(input_formats=['%m/%d/%Y %H:%M'])
     

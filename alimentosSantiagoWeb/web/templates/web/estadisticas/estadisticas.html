@@ -1,0 +1,28 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block js %}
+{% endblock %}
+{% block contenido %}
+{% load humanize %}
+<br><br>
+<div class="container-lg card">
+    <div class="card-body">
+        <div class="justify-content-center text-center">
+            <h5>Estadísticas Financieras</h5>
+            <br>
+            {% if pedidos %}
+                {% for pedido in pedidos %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="p-1">Fecha: {{ pedido.fecha_compra }}</h6>
+                            <h6 class="p-1">Total ${{ pedido.total | intcomma }}</h6>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

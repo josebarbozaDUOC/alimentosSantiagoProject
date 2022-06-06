@@ -34,7 +34,10 @@
                     <hr>
                     <a href="{% url 'perfil_usuario' %}"><i class="bi bi-person-circle"></i> Opciones Perfil</a>
                     <a href="{% url 'carrito_compras' %}"><i class="bi bi-cart3"></i> Carrito Compras</a>
-                    <!---<a href="{% url 'favoritos' %}"><i class="bi bi-heart-fill"></i> Favoritos</a>--->
+                    {% if perms.web.add_tipo_pago %}
+                    <hr>
+                    <a href="{% url 'estadisticas' %}"><i class="bi bi-bar-chart-line"></i> Estadísticas</a>
+                    {% endif %}
                     {% if perms.web.view_producto %}
                     <hr>
                     <a href="{% url 'listar_productos' %}"><i class="bi bi-card-list"></i> Lista de Platos</a>
@@ -63,9 +66,9 @@
         {% else %}
         <!-- si no está registrado que salgan los botones | los botones no tienen problema, solo es sintaxis de django en html -->
         <div>
-            <button onclick="location.href='{% url 'login' %}'" type="button" class="btn btn-success">
+            <button onclick="location.href='{% url 'login' %}'" type="button" class="btn btn-success btn-sm">
                 Iniciar Sesión</button>
-            <button onclick="location.href='{% url 'registro' %}'" type="button" class="btn btn-primary">
+            <button onclick="location.href='{% url 'registro' %}'" type="button" class="btn btn-primary btn-sm">
                 Registrarse</button>
         </div>
         {% endif %}

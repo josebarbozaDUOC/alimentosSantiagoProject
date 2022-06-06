@@ -124,6 +124,7 @@ def perfil_usuario(request):
     data = {
     'cliente'               : cliente,
     'form'                  : ClienteForm(instance=cliente),
+    'formUser'              : CustomUserCreationForm(),
     'pedidos'               : pedidos,
     'pedido_detalle'        : pedido_detalle,
     'productos'             : productos,
@@ -437,14 +438,12 @@ def confirmacion_pedido(request):
     
     return redirect(to='perfil_usuario')
 
-def favoritos(request):
-    return render(request, 'web/favoritos.html')
-
-
-def fecha(request):
+def estadisticas(request):
+    
+    pedidos = Pedido.objects.filter(cliente = request.user.id, pagado = True)
+        
     data = {
-        'form': CarritoForm()
+        'pedidos' : pedidos
     }
-    if request.method == 'POST':
-        formulario = CarritoForm(data=request.POST)
-    return render(request, 'web/test.html', data)
+    
+    return render(request, 'web/estadisticas/estadisticas.html', data)

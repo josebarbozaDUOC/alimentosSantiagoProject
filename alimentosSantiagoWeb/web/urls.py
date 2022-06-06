@@ -1,8 +1,9 @@
 from django.urls import path
 from .views import home, registro, agregar_producto, listar_productos, modificar_producto, \
-    eliminar_producto, favoritos, perfil_usuario, \
+    eliminar_producto, perfil_usuario, \
     carrito_compras, agregar_a_carrito, eliminar_producto_carrito, pagar, restar_cantidad, sumar_cantidad, \
-    opciones_pedido, pedido_programado, fecha, pedido_metodo_pago, confirmacion_pedido
+    opciones_pedido, pedido_programado, pedido_metodo_pago, confirmacion_pedido, \
+    estadisticas
     
 
 # arriba importar cada view
@@ -19,7 +20,6 @@ urlpatterns = [
     path('perfil-usuario/', perfil_usuario, name="perfil_usuario"),
     path('agregar-a-carrito/<id>/', agregar_a_carrito, name="agregar_a_carrito"),
     path('carrito-compras/', carrito_compras, name="carrito_compras"),
-    path('favoritos/', favoritos, name="favoritos"),
     path('eliminar-producto-carrito/<id>/', eliminar_producto_carrito, name="eliminar_producto_carrito"),
     path('restar-cantidad/<id>/', restar_cantidad, name="restar_cantidad"),
     path('sumar-cantidad/<id>/', sumar_cantidad, name="sumar_cantidad"),
@@ -28,7 +28,7 @@ urlpatterns = [
     path('pagar', pagar, name="pagar"),
     path('pedido-metodo-pago/<id>/', pedido_metodo_pago, name="pedido_metodo_pago"),
     path('confirmacion-pedido', confirmacion_pedido, name="confirmacion_pedido"),
-    path('fecha', fecha, name="fecha"), #fecha es un test de date calendar en test.html
+    path('estadisticas', estadisticas, name="estadisticas"),
 ]
 
 

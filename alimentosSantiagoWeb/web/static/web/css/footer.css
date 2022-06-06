@@ -1,0 +1,12 @@
+footer{
+    min-height: 10rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color:rgb(218, 86, 86);
+    width: 100%;
+    margin-top:auto; 
+    text-align: center;
+    color: antiquewhite;
+    padding: 1rem;
+}

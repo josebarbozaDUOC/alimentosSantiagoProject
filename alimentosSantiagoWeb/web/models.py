@@ -5,7 +5,6 @@ from django.contrib.auth.models import User #para acceder al user de la base de 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime, timedelta
-from .mod_funciones import codigo as cod
 import uuid
 
 # Create your models here.
