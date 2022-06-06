@@ -30,7 +30,7 @@
 
         <div class="">
             <!-- CONTENIDO CENTRAL -->
-            <div class="col-md-10 offset-md-1"> <!---puede ser solo col-12-->
+            <div class="col-sm-10 col-lg-8 offset-sm-1 offset-lg-2"> <!---puede ser solo col-12-->
 
                 <!---agregar las categorias, restaurants y filtros-->
                 <div class="container content-section" id="contenido">
@@ -41,13 +41,12 @@
                             <div class="input-group mb-3 w-auto">
                                 <span class="input-group-text rounded-pill" id="basic-addon1">
                                     <i class="bi bi-search"></i></span>
-                                <input type="text" class="form-control form-control-lg rounded-pill" 
+                                <input type="text" class="form-control form-control rounded-pill" 
                                     placeholder="Busqueda..." aria-label="Search" 
                                     aria-describedby="basic-addon1" name="q">
                             </div>
                         </form>
                     </div>
-                    <br>
 
                     <div class="categorias" id="categoriascontainer">
                         <a href="{% url 'home' %}" id="submit btncat" onclick="myFunction()" 
@@ -56,7 +55,7 @@
 
                         {% for cat in categorias %}
                         <a href="{% url 'home' %}?qc={{cat}}" id="submit btncat" onclick="myFunction()" 
-                        class="btn btn-outline-danger btn-lg target" 
+                        class="btn btn-outline-danger target" 
                         name="btn-categoria">{{ cat | capfirst }}</a>
                         {% endfor %}
                     </div>
@@ -66,24 +65,24 @@
                     luego abajo vendria el listado de todos los platos-->
                     {% if categoria %}
                     <div>
-                        <h1 class="animate__animated animate__lightSpeedInLeft">{{ categoria | capfirst }}</h1>
+                        <h2 class="animate__animated animate__lightSpeedInLeft">{{ categoria | capfirst }}</h2>
                     </div>
                     {% else %}
                     <div>
                         {% if se_busca %}
                             {% if num_prods == 1 %}
-                            <h4>Se encontró {{ num_prods }} producto para "{{ filtro }}"</h4>
+                            <h5>Se encontró {{ num_prods }} producto para "{{ filtro }}"</h5>
                             {% else %}
-                            <h4>Se encontraron {{ num_prods }} productos para "{{ filtro }}"</h4>
+                            <h5>Se encontraron {{ num_prods }} productos para "{{ filtro }}"</h5>
                             {% endif %}
                         <br>
                         {% else %}
-                        <h1 class="animate__animated animate__lightSpeedInLeft">El Chef Recomienda</h1>
+                        <h2 class="animate__animated animate__lightSpeedInLeft">El Chef Recomienda</h2>
                         {% endif %}
                     </div>
                     {% endif %}
 
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 menu text-center">
+                    <div class="row justify-content-center row-cols-1 row-cols-sm-3 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 menu text-center">
                         {% for p in entity %}
                         <div class="platos pb-4 animate__animated animate__zoomIn" id="plato">
                             <div class="col plato card">
@@ -98,8 +97,8 @@
 
                                 <div class=" card-body detalle"> 
                                     <h6>{{ p.restaurant | capfirst }}</h6>
-                                    <h4>{{ p.nombre | title }}</h4>
-                                    <h5>${{ p.precio | intcomma }}</h5>
+                                    <h5>{{ p.nombre | title }}</h5>
+                                    <h6>${{ p.precio | intcomma }}</h6>
                                 </div>
                                 {% if user.is_authenticated %}
                                 <a href="{% url 'agregar_a_carrito' p.id %}" id="submit" class="btn btn-outline-danger w-100 p-2 btn-carrito" name="btn-carrito">Agregar al carrito</a>

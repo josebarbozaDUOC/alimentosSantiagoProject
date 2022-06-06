@@ -29,10 +29,10 @@
     position: relative;
     transform-origin: right;
     right: 0;
-    min-height: 45rem;
+    min-height: 14rem;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
     background-color: #dfbbbb; /*fondo del sidebar*/
-    width:17em; /* el ancho de la sidebar*/
+    width:14em; /* el ancho de la sidebar*/
     border-top-left-radius: 1%;
     border-bottom-left-radius: 1%;
     z-index: 2;
@@ -45,7 +45,7 @@
 .overlay a {
     padding: 8px;
     text-decoration: none;
-    font-size: 24px;
+    font-size: 18px;
     color: #818181;
     display: block; /* Display block instead of inline */
     transition: 0.1s ease-in-out; /* Transition effects on hover (color) */
@@ -58,7 +58,7 @@
 
 /* Position the close button (top right corner) */
 .overlay .closebtn {
-    font-size: 40px;
+    font-size: 34px;
     /*position: absolute;
     top: 20px;
     right: 45px;
@@ -69,8 +69,8 @@
 @media screen and (max-height: 450px) {
     .overlay a {font-size: 20px}
     .overlay .closebtn {
-        font-size: 40px;
-        top: 15px;
-        right: 35px;
+        font-size: 34px;
+        /*top: 15px;
+        right: 35px;*/
     }
 }

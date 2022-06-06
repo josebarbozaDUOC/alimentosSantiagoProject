@@ -258,6 +258,8 @@ class Proveedor(models.Model):
     #debiese ser solo la PK de user, y no un 1to1
     #el proveedor solo debe crearse cuando se le dan permisos
     user            = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    
+    user            = models.ForeignKey(User, on_delete=models.CASCADE)
     restaurant      = models.ForeignKey(Restaurant, on_delete=models.PROTECT)
     direccion_local = models.CharField(max_length=100)
     rut             = models.CharField(max_length=10)       ####?????

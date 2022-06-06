@@ -27,20 +27,20 @@
 
                     <!--- contenido del sidebar-->
                     <div class="d-inline ">
-                        <h4 class="profile-name d-inline "><i class="bi bi-at"></i>{{ user.username }}</h4>
+                        <h5 class="profile-name d-inline "><i class="bi bi-at"></i>{{ user.username | capfirst }}</h5>
                     </div> 
                     <hr>
                     <a href="{% url 'home' %}"><i class="bi bi-house"></i> Inicio</a>
                     <hr>
                     <a href="{% url 'perfil_usuario' %}"><i class="bi bi-person-circle"></i> Opciones Perfil</a>
                     <a href="{% url 'carrito_compras' %}"><i class="bi bi-cart3"></i> Carrito Compras</a>
-                    <a href="{% url 'favoritos' %}"><i class="bi bi-heart-fill"></i> Favoritos</a>
+                    <!---<a href="{% url 'favoritos' %}"><i class="bi bi-heart-fill"></i> Favoritos</a>--->
                     {% if perms.web.view_producto %}
                     <hr>
                     <a href="{% url 'listar_productos' %}"><i class="bi bi-card-list"></i> Lista de Platos</a>
                     {% endif %}
                     {% if perms.web.add_producto %}
-                    <a href="{% url 'agregar_producto' %}"><i class="bi bi-save"></i> Agregar Platos</a>
+                    <a href="{% url 'agregar_producto' %}"><i class="bi bi-plus-circle"></i> Agregar Platos</a>
                     {% endif %}
                     <hr>
                     <a href="{% url 'logout' %}"><i class="bi bi-power"></i> Cerrar Sesión</a>
@@ -57,7 +57,7 @@
             <!---</div>-->
             
             <!---tiene un bug al entrar en pantalla completa f11, solo una parte se puede clickear-->
-            <button class="btn btn-sidebar" data-sidebar-button id="btn-sidebar" onclick="openNav()" >&#9776; Cuenta Usuario</button>
+            <button class="btn btn-sidebar btn-sm" data-sidebar-button id="btn-sidebar" onclick="openNav()" >&#9776; Cuenta Usuario</button>
         </div>
     
         {% else %}

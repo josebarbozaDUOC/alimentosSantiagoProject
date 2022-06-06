@@ -2,8 +2,8 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
 }
 .img-rounded-container{
-    width: 100px;
-    height: 100px;
+    width: 5rem;
+    height: 5rem;
 }
 
 .mini-rounded-img{
@@ -12,4 +12,11 @@
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5 );
+}
+
+@media only screen and (max-width: 700px) {
+    .img-rounded-container{
+        width: 4rem;
+        height: 4rem;
+    }
 }
