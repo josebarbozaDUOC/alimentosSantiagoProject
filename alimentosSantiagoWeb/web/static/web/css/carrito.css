@@ -1,17 +1,14 @@
 .carrito-vacio{
     color:rgb(74, 74, 74);
 }
-.carrito-img-container{
-    width: 200px;
-    height: 200px;
-    margin:auto;
+.checkName{
+    font-size: small;
 }
-.carrito-img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2 );*/
+.boletaNombre{
+    font-size: medium;
 }
-.plato{
-    min-width: 300px;
+.boleta{
+    width: 18rem;
+    min-width: 15rem;
+    max-width: 18rem;
 }

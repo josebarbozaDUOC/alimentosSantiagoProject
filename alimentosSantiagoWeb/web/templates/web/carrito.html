@@ -21,237 +21,227 @@
 {% load humanize %}
 <!---contenido-->
 
-<br><br>
-<div class="card">
-    <div class="card-body">
-        <h3 class="text-center">Carrito de compras</h3>
-        <hr>
-        <br>
-        <!---si NO HAY producto en el carrito-->
-        {% if not productos_carrito %}
-        <div class="col carrito-vacio">
-            <div class="carrito-img-container">
-                <a href="{% url 'home' %}"><img src="{% static 'web/img/dishImg_sm.png' %}" class="carrito-img" alt=""></a>
+<div class="container-lg">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="text-center">Carrito de compras</h3>
+            <hr>
+            <!---si NO HAY producto en el carrito-->
+            {% if not productos_carrito %}
+            <div class="col carrito-vacio">
+                <div class="carrito-img-container">
+                    <a href="{% url 'home' %}"><img src="{% static 'web/img/dishImg_sm.png' %}" class="carrito-img" alt=""></a>
+                </div>
+                <br>
+                <h4 class="text-center">Tu carrito está vacío</h4>
+                <h5 class="text-center">Los mejores platos están esperando</h5>
+                <br>
             </div>
-            <br>
-            <h4 class="text-center">Tu carrito está vacío</h4>
-            <h5 class="text-center">Los mejores platos están esperando</h5>
-            <br>
-        </div>
-        {% else %}
-        <!---SI HAY producto en el carrito-->
-        <div class="row justify-content-center">
-
-            <!---SE MUESTRAN LOS PROD DEL CARRITO -->
-            <div class="col-md-7 card ">
-                <div class="row menu platos ">
+            {% else %}
+            <!---SI HAY producto en el carrito-->
+            <div class="row justify-content-center">
     
-                    <!---doble loop para acceder a ambas tablas filtradas-->
-                    {% for p in productos %}
-                        {% for c in productos_carrito %}
-                            {% if c.producto.id == p.id %}
-    
-                            <div class="col-md-3 card plato m-2 animate__animated animate__zoomIn">
-    
-                                <div class="contenedor_plato">
-                                    <hr>
-                                    <div class="plato_imagen">
-                                        {% if p.imagen %}
-                                        <img class="card-img-top img-fluid" src="{{ p.imagen.url }}" alt="">
-                                        {% else %}
-                                        <img class="card-img-top img-fluid" src="{% static 'web/img/placeholder.jpg' %}" alt="">
-                                        {% endif %}
-                                    </div>
-    
-                                    <div class=" card-body detalle"> 
-                                        <h6>{{ p.restaurant | capfirst }}</h6>
-                                        <h4>{{ p.nombre | title }}</h4>
-                                        <h5>${{ p.precio | intcomma }}</h5>
-                                        <hr>
-                                        <div class="row">
-                                            <h5 class="col">Cantidad:</h5>
-                                            <div class="col">
-                                                {% if c.cantidad_producto > 1 %}
-                                                <a href="{% url 'restar_cantidad' p.id %}" id="submit" 
-                                                class="btn btn-danger" name="btn-carrito"><i class="bi bi-dash-lg"></i></a>
+                <!---SE MUESTRAN LOS PROD DEL CARRITO -->
+                <div class="col">
+                    <br><br>
+                    <div class="container">
+                        <div class="row justify-content-center row-cols-1 row-cols-sm-3 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 menu text-center">
+            
+                            <!---doble loop para acceder a ambas tablas filtradas-->
+                            {% for p in productos %}
+                                {% for c in productos_carrito %}
+                                    {% if c.producto.id == p.id %}
+            
+                                    <div class="platos pb-4 animate__animated animate__zoomIn">
+            
+                                        <div class="col plato card">
+                                            <div class="plato_imagen">
+                                                {% if p.imagen %}
+                                                <img class="card-img-top img-fluid" src="{{ p.imagen.url }}" alt="">
                                                 {% else %}
-                                                <a href="{% url 'restar_cantidad' p.id %}" id="submit" 
-                                                class="btn btn-danger disabled" name="btn-carrito"><i class="bi bi-dash-lg"></i></a>
+                                                <img class="card-img-top img-fluid" src="{% static 'web/img/placeholder.jpg' %}" alt="">
                                                 {% endif %}
                                             </div>
-                                            <div class="col card"><h4>{{ c.cantidad_producto | title }}</h4></div>
-                                            <div class="col">
-                                                <a href="{% url 'sumar_cantidad' p.id %}" id="submit" 
-                                                class="btn btn-success " name="btn-carrito"><i class="bi bi-plus-lg"></i></a>
+            
+                                            <div class=" card-body detalle"> 
+                                                <h6>{{ p.restaurant | capfirst }}</h6>
+                                                <h5>{{ p.nombre | title }}</h5>
+                                                <h6>${{ p.precio | intcomma }}</h6>
+                                                <hr>
+                                                <div class="d-flex ">
+                                                    <h6 class="w-100">Cantidad:</h6>
+                                                    <div class="flex-shrink-0">
+                                                        {% if c.cantidad_producto > 1 %}
+                                                        <a href="{% url 'restar_cantidad' p.id %}" id="submit" 
+                                                        class="btn btn-danger btn-sm py-0 px-1" name="btn-carrito"><i class="bi bi-dash-lg"></i></a>
+                                                        {% else %}
+                                                        <a href="{% url 'restar_cantidad' p.id %}" id="submit" 
+                                                        class="btn btn-danger btn-sm py-0 px-1 disabled" name="btn-carrito"><i class="bi bi-dash-lg"></i></a>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="w-25"><h6>{{ c.cantidad_producto | title }}</h6></div>
+                                                    <div class="flex-shrink-0">
+                                                        <a href="{% url 'sumar_cantidad' p.id %}" id="submit" 
+                                                        class="btn btn-success btn-sm py-0 px-1" name="btn-carrito"><i class="bi bi-plus-lg"></i></a>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <h6>Subtotal: ${{ c.subtotal | intcomma }}</h6>
+            
+                                            <!---BTN ELIMINAR ESTE PRODUCTO DEL CARRITO-->
+                                            <!---quizas que al eliminar pida confirmar y sale un btn baje este-->
+                                            <a href="{% url 'eliminar_producto_carrito' p.id %}" id="submit" 
+                                            class="btn btn-outline-danger btn-sm w-100 p-1 btn-carrito" 
+                                            name="btn-carrito"><i class="bi bi-trash3-fill"></i> Eliminar del carrito</a>
                                         </div>
-                                        <br>
-
-
-                                        <h5>Subtotal: ${{ c.subtotal | intcomma }}</h5>
-    
-                                        <!---BTN ELIMINAR ESTE PRODUCTO DEL CARRITO-->
-                                        <!---quizas que al eliminar pida confirmar y sale un btn baje este-->
-                                        <a href="{% url 'eliminar_producto_carrito' p.id %}" id="submit" 
-                                        class="btn btn-outline-danger w-100 p-2 btn-carrito" 
-                                        name="btn-carrito"><i class="bi bi-trash3-fill"></i> Eliminar del carrito</a>
                                     </div>
-                                    <hr>
-                                </div>
-                            </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                    
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                            
+                        </div>
+                    </div>
                 </div>
-            </div>
+        
+                <!--- BOLETA  -->
+                <div class="col card text-center boleta">
+                    <br>
+                    <h6>Tipo despacho:</h6>
+                    <div class="btn-group btn-group-toggle " data-toggle="buttons" id="boolenvio">
     
-            <!--- BOLETA  -->
-            <div class="col-md-2  card text-center boleta">
-                <br>
-                <h6>Tipo despacho:</h6>
-                <div class="btn-group btn-group-toggle " data-toggle="buttons" id="boolenvio">
-
-                    {% if not carrito.es_envio_domicilio %}
-                    <input type="radio" class="btn-check form-check-input" name="options3" 
-                    id="option3" autocomplete="off" value="option1" 
-                    onclick="location.href='{% url 'opciones_pedido' 'False' %}'" checked>
-                    <label class="form-check-label btn btn-outline-danger active" for="option3">
-                        <i class="bi bi-shop col"></i> <h6 class="col">Retiro en Tienda</h6>
-                    </label>
-
-                    <input type="radio" class="btn-check form-check-input" name="options3" 
-                    id="option4" autocomplete="off" value="option2" 
-                    onclick="location.href='{% url 'opciones_pedido' 'True' %}'">
-                    <label class="form-check-label btn btn-outline-danger" for="option4">
-                        <i class="bi bi-truck col"></i> <h6 class="col">Envio a domicilio</h6>
-                    </label>
-
-                    {% else %}
-                    <input type="radio" class="btn-check form-check-input" name="options3" 
-                    id="option3" autocomplete="off" value="option1" 
-                    onclick="location.href='{% url 'opciones_pedido' 'False' %}'">
-                    <label class="form-check-label btn btn-outline-danger" for="option3">
-                        <i class="bi bi-shop col"></i> <h6 class="col">Retiro en Tienda</h6>
-                    </label>
-
-                    <input type="radio" class="btn-check form-check-input" name="options3" 
-                    id="option4" autocomplete="off" value="option2" 
-                    onclick="location.href='{% url 'opciones_pedido' 'True' %}'" checked>
-                    <label class="form-check-label btn btn-outline-danger active" for="option4">
-                        <i class="bi bi-truck col"></i> <h6 class="col">Envio a domicilio</h6>
-                    </label>
-                    {% endif %}
-                </div>
-
-                <hr>
-
-                <h6>Envio programado:</h6>
-                <div class="btn-group btn-group-toggle " data-toggle="buttons" id="boolprogramado">
-                    
-                    {% if not carrito.es_programado %}
-                    <input type="radio" class="btn-check form-check-input" name="options4" 
-                    id="option5" autocomplete="off" value="option1" 
-                    onclick="location.href='{% url 'pedido_programado' 'False' %}'" checked>
-                    <label class="form-check-label btn btn-outline-danger active" for="option5">
-                        <i class="bi bi-x-lg col"></i> No</label>
-
-                    <input type="radio" class="btn-check form-check-input" name="options4" 
-                    id="option6" autocomplete="off" value="option2"
-                    onclick="location.href='{% url 'pedido_programado' 'True' %}'">
-                    <label class="form-check-label btn btn-outline-danger" for="option6">
-                        <i class="bi bi-check-lg col"></i> Sí</label>
-                    {% else %}
-
-                    <input type="radio" class="btn-check form-check-input" name="options4" 
-                    id="option5" autocomplete="off" value="option1" 
-                    onclick="location.href='{% url 'pedido_programado' 'False' %}'">
-                    <label class="form-check-label btn btn-outline-danger" for="option5">
-                        <i class="bi bi-x-lg col"></i> No</label>
-
-                    <input type="radio" class="btn-check form-check-input" name="options4" 
-                    id="option6" autocomplete="off" value="option2"
-                    onclick="location.href='{% url 'pedido_programado' 'True' %}'" checked>
-                    <label class="form-check-label btn btn-outline-danger active" for="option6">
-                        <i class="bi bi-check-lg col"></i> Sí</label>
-                    {% endif %}
-                </div>
-
-                {% if carrito.es_programado %}
-                <br>
-
-                <h6>Elegir fecha:</h6>
-                <!-- MODAL BTN FECHA -->
-                <div class="col-6 mx-auto">
-                    <button type="button" class="btn btn-outline-danger btn-lg " 
-                        data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <i class="bi bi-calendar3" style="font-size: 2rem;"></i></button>
-                </div>
-                <!-- MODAL FORM FECHA -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Elegir Fecha</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        {% if not carrito.es_envio_domicilio %}
+                        <input type="radio" class="btn-check form-check-input" name="options3" 
+                        id="option3" autocomplete="off" value="option1" 
+                        onclick="location.href='{% url 'opciones_pedido' 'False' %}'" checked>
+                        <label class="form-check-label btn btn-outline-danger btn-sm active" for="option3">
+                            <i class="bi bi-shop col"></i> <h6 class="col checkName">Retiro en Tienda</h6>
+                        </label>
+    
+                        <input type="radio" class="btn-check form-check-input" name="options3" 
+                        id="option4" autocomplete="off" value="option2" 
+                        onclick="location.href='{% url 'opciones_pedido' 'True' %}'">
+                        <label class="form-check-label btn btn-outline-danger btn-sm" for="option4">
+                            <i class="bi bi-truck col"></i> <h6 class="col checkName">Envio a domicilio</h6>
+                        </label>
+    
+                        {% else %}
+                        <input type="radio" class="btn-check form-check-input" name="options3" 
+                        id="option3" autocomplete="off" value="option1" 
+                        onclick="location.href='{% url 'opciones_pedido' 'False' %}'">
+                        <label class="form-check-label btn btn-outline-danger btn-sm" for="option3">
+                            <i class="bi bi-shop col"></i> <h6 class="col checkName">Retiro en Tienda</h6>
+                        </label>
+    
+                        <input type="radio" class="btn-check form-check-input" name="options3" 
+                        id="option4" autocomplete="off" value="option2" 
+                        onclick="location.href='{% url 'opciones_pedido' 'True' %}'" checked>
+                        <label class="form-check-label btn btn-outline-danger btn-sm active" for="option4">
+                            <i class="bi bi-truck col"></i> <h6 class="col checkName">Envio a domicilio</h6>
+                        </label>
+                        {% endif %}
+                    </div>
+    
+                    <hr>
+    
+                    <h6>Envio programado:</h6>
+                    <div class="btn-group btn-group-toggle " data-toggle="buttons" id="boolprogramado">
+                        
+                        {% if not carrito.es_programado %}
+                        <input type="radio" class="btn-check form-check-input" name="options4" 
+                        id="option5" autocomplete="off" value="option1" 
+                        onclick="location.href='{% url 'pedido_programado' 'False' %}'" checked>
+                        <label class="form-check-label btn btn-outline-danger btn-sm active" for="option5">
+                            <i class="bi bi-x-lg col"></i> No</label>
+    
+                        <input type="radio" class="btn-check form-check-input" name="options4" 
+                        id="option6" autocomplete="off" value="option2"
+                        onclick="location.href='{% url 'pedido_programado' 'True' %}'">
+                        <label class="form-check-label btn btn-outline-danger btn-sm" for="option6">
+                            <i class="bi bi-check-lg col"></i> Sí</label>
+                        {% else %}
+    
+                        <input type="radio" class="btn-check form-check-input" name="options4" 
+                        id="option5" autocomplete="off" value="option1" 
+                        onclick="location.href='{% url 'pedido_programado' 'False' %}'">
+                        <label class="form-check-label btn btn-outline-danger btn-sm" for="option5">
+                            <i class="bi bi-x-lg col"></i> No</label>
+    
+                        <input type="radio" class="btn-check form-check-input" name="options4" 
+                        id="option6" autocomplete="off" value="option2"
+                        onclick="location.href='{% url 'pedido_programado' 'True' %}'" checked>
+                        <label class="form-check-label btn btn-outline-danger btn-sm active" for="option6">
+                            <i class="bi bi-check-lg col"></i> Sí</label>
+                        {% endif %}
+                    </div>
+    
+                    {% if carrito.es_programado %}
+                    <br>
+    
+                    <h6>Elegir fecha:</h6>
+                    <!-- MODAL BTN FECHA -->
+                    <div class="col-6 mx-auto">
+                        <button type="button" class="btn btn-outline-danger  px-2 py-0" 
+                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="bi bi-calendar3" style="font-size: 2.5rem;"></i></button>
+                    </div>
+                    <!-- MODAL FORM FECHA -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Elegir Fecha</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Formulario fecha programada -->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {{ form.fecha_programada }}
+                                    <hr>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <input type="submit" value="Confirmar Fecha" class="btn btn-primary p-2">
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <!-- Formulario fecha programada -->
-                            <form action="" method="post">
-                                {% csrf_token %}
-                                {{ form.fecha_programada }}
-                                <hr>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <input type="submit" value="Confirmar Fecha" class="btn btn-primary p-2">
-                                </div>
-                            </form>
                         </div>
                     </div>
-                    </div>
+    
+                    <br>
+                    <h6 class="boletaNombre">Envio programado para el: </h6>
+                    <h6 class="boletaNombre">{{ carrito.fecha_programada }}</h6>
+    
+                    {% else %}
+                    <!--- SI EL ENVIO NO ES PROGRAMADO, QUIERE DECIR
+                        QUE SE DEBE ENTREGAR AHORA + 30MIN 
+                        si es envio domi, pero si es retiro tienda, son +10 min--->
+                    <br>
+                    <h6 class="boletaNombre">Su pedido estará listo: </h6>
+                    <h6 class="boletaNombre">Para {{ dia_entrega_est }} a las {{ hora_entrega_est }}</h6>
+                    {% endif %}
+    
+                    <hr>
+                    <h6 class="boletaNombre">{{ carrito.numero_productos | title }} Productos</h6>
+                    <h6 class="boletaNombre">Subtotal: ${{ carrito.subtotal | intcomma }}</h6>
+                    <hr>
+                    <h6 class="boletaNombre">Envio:    ${{ carrito.costo_envio | intcomma }}</h6>
+                    <hr>
+                    <h5 class="">Total:    ${{ carrito.total | intcomma }}</h5>
+                    <hr>
+                    <!---
+                    <input type="submit" value="Ir a Pagar" 
+                    class="btn btn-outline-danger w-100 p-2 btn-carrito btn-lg" >
+                    -->
+                    <a href="{% url 'pagar' %}" id="submit" type="submit"
+                        class="btn btn-outline-danger w-100 p-2 btn-carrito btn-lg" 
+                        name="btn-carrito">Ir a Pagar</a>
+                    <br>
                 </div>
-
-                <br>
-                <h5>Envio programado para el: </h5>
-                <h5>{{ carrito.fecha_programada }}</h5>
-                <hr>
-                <h5>hora entrega estimada</h5>
-                <h5>{{ carrito.fecha_entrega_estimada }}</h5>
-                {% else %}
-                <!--- SI EL ENVIO NO ES PROGRAMADO, QUIERE DECIR
-                    QUE SE DEBE ENTREGAR AHORA + 30MIN 
-                    si es envio domi, pero si es retiro tienda, son +10 min--->
-                <br>
-                <h6>Su pedido estará listo: </h6>
-                <h4>Para {{ dia_entrega_est }} a las {{ hora_entrega_est }}</h4>
-                <hr>
-                <h5>hora entrega estimada</h5>
-                <h5>{{ carrito.fecha_entrega_estimada }}</h5>
-                <hr>
-                <h5>Envio programado para el: </h5>
-                <h5>{{ carrito.fecha_programada }}</h5>
-                {% endif %}
-
-                <hr>
-                <h5>{{ carrito.numero_productos | title }} Productos</h5>
-                <h5>Subtotal: ${{ carrito.subtotal | intcomma }}</h5>
-                <hr>
-                <h5>Envio:    ${{ carrito.costo_envio | intcomma }}</h5>
-                <hr>
-                <h3 class="font-weight-bold">Total:    ${{ carrito.total | intcomma }}</h3>
-                <hr>
-                <!---
-                <input type="submit" value="Ir a Pagar" 
-                class="btn btn-outline-danger w-100 p-2 btn-carrito btn-lg" >
-                -->
-                <a href="{% url 'pagar' %}" id="submit" type="submit"
-                    class="btn btn-outline-danger w-100 p-2 btn-carrito btn-lg" 
-                    name="btn-carrito">Ir a Pagar</a>
-                <br>
             </div>
+            <hr>
+            {% endif %}
         </div>
-        <hr>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

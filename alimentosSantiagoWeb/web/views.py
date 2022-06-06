@@ -111,7 +111,7 @@ def perfil_usuario(request):
     
     #Busca y rescata algun pedido ya entregado HISTORIAL
     if Pedido.objects.filter(cliente = request.user.id, pagado = True, entregado = True):
-        historial_pedidos = Pedido.objects.filter(cliente = request.user.id, pagado = True, entregado = True)
+        historial_pedidos = Pedido.objects.filter(cliente = request.user.id, pagado = True, entregado = True).order_by('-id')
         if Detalle_pedido.objects.filter(pedido__in = historial_pedidos):
             historial_pedido_detalle = Detalle_pedido.objects.filter(pedido__in = historial_pedidos)
             if Producto.objects.filter(id__in=Subquery(historial_pedido_detalle.values('producto'))):
