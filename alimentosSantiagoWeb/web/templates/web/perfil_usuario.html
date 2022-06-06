@@ -125,6 +125,29 @@
             <h5>Tú pedido está en camino</h5>
                 {% for pedido in pedidos %}
                     <div class="row justify-content-center">
+
+                                <!--- TEST hora --->
+                        <div class="card col-4 offset-lg-4">
+                            <div class="card-body text-center">
+                                <p>pedido</p>
+                                <p>{{ pedido.fecha_entrega_estimada }}</p>
+                                <div id="pedidoEntregado" onload="currentTime()"></div>
+                                <hr>
+                                <div id="fechaPedido" onload="currentTime()"></div>
+                                <hr>
+                                <p>actual</p>
+                                <div id="fechaActual" onload="currentTime()"></div>
+                                <hr>
+                                <div id="fecha" onload="currentTime()"></div>
+                                <div id="hora" onload="currentTime()"></div>
+                                <hr>
+                                <button onclick="deliveryDate('{{ pedido.fecha_entrega_estimada }}')">PasarFecha</button>
+                            </div>
+                        </div>
+                        <br>
+
+
+
                         <!---SE MUESTRAN LOS PROD DEL CARRITO -->
                         <div class="col-md-7 card text-center contenedorPedido container">
                             <br>

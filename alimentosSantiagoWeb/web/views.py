@@ -433,7 +433,7 @@ def confirmacion_pedido(request):
     for p in productos:
         for d in detalle:
             if d.producto.id == p.id:
-                p.resta(d.cantidad_producto)
+                p.restar_stock(d.cantidad_producto)
                 p.save()
     
     return redirect(to='perfil_usuario')

@@ -27,7 +27,7 @@ function pedidoExitoso(){
     Swal.fire({
     icon: 'success',
     title: '¡Felicidades!',
-    text: "Tu pedido se está preparando",
+    text: "Tu pedido se está preparando, llegará: ",
     allowOutsideClick: false,
     timer: 4000,
     timerProgressBar: true,

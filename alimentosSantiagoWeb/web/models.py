@@ -39,6 +39,7 @@ class Producto(models.Model):
     disponible          = models.BooleanField(default=True)
     def __str__(self):
         return self.nombre
+    
     def restar_stock(self, resta):
         self.stock =- resta
 
