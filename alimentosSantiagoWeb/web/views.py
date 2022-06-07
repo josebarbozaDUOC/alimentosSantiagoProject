@@ -122,27 +122,30 @@ def perfil_usuario(request):
         historial_productos         = None
     
     data = {
-    'cliente'               : cliente,
-    'form'                  : ClienteForm(instance=cliente),
-    'formUser'              : CustomUserCreationForm(),
-    'pedidos'               : pedidos,
-    'pedido_detalle'        : pedido_detalle,
-    'productos'             : productos,
-    'historial_pedidos'     : historial_pedidos,
-    'historial_detalle'     : historial_pedido_detalle,
-    'historial_productos'   : historial_productos,
-    'hay_pedido_activo'     : hay_pedido_activo,
-    'idtab'                 : idtab,
-    'dia_entrega_est'       : dia_entrega_est,
-    'hora_entrega_est'      : hora_entrega_est
+    'cliente'                   : cliente,
+    'form'                      : ClienteForm(instance=cliente),
+    'formUser'                  : CustomUserCreationForm(),
+    'pedidos'                   : pedidos,
+    'pedido_detalle'            : pedido_detalle,
+    'productos'                 : productos,
+    'historial_pedidos'         : historial_pedidos,
+    'historial_pedido_detalle'  : historial_pedido_detalle,
+    'historial_productos'       : historial_productos,
+    'hay_pedido_activo'         : hay_pedido_activo,
+    'idtab'                     : idtab,
+    'dia_entrega_est'           : dia_entrega_est,
+    'hora_entrega_est'          : hora_entrega_est
     }
     if request.method == 'POST':
         formulario = ClienteForm(data=request.POST, instance=cliente)
-        if formulario.is_valid():
+        formUser = CustomUserCreationForm(data=request.POST)
+        if formulario.is_valid() & formUser.is_valid():
             formulario.save()
+            formUser.save()
             messages.success(request, "Perfil modificado correctamente")
         else:
             data['form'] = formulario
+            data['formUser'] = formUser
     
     return render(request, 'web/perfil_usuario.html', data)
 
