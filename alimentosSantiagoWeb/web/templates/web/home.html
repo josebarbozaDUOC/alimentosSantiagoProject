@@ -45,8 +45,7 @@
         </div>
         <br>
 
-        <!---los recomendados solo debiesen ser unos cuantos platos en un carousel
-        luego abajo vendria el listado de todos los platos-->
+        <!--- NOMBRE FILTRO -->
         {% if categoria %}
         <div>
             <h2 class="animate__animated animate__lightSpeedInLeft">{{ categoria | capfirst }}</h2>
@@ -65,7 +64,8 @@
             {% endif %}
         </div>
         {% endif %}
-
+        
+        <!--- PRODUCTOS -->
         <div class="row justify-content-center row-cols-1 row-cols-sm-3 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 menu text-center">
             {% for p in entity %}
             <!--- MÓDULO PRODUCTO -->
