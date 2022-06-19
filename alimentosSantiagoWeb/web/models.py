@@ -41,7 +41,7 @@ class Producto(models.Model):
         return self.nombre
     
     def restar_stock(self, resta):
-        self.stock =- resta
+        self.stock -= resta
 
 class Avatar(models.Model):
     nombre              = models.CharField(max_length=50)

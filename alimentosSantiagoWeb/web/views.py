@@ -339,13 +339,13 @@ def pagar(request):
     metodo_pago     = Tipo_pago.objects.get(id=1)
     hora_compra     = datetime.now()
     
+    #-----PEDIDO
     #se busca en tabla pedido, si no existe un pedido que corresponda a lo del carrito
     #que me cree un pedido nuevo, con la mayoria de datos del carrito
     #pero mientras está en espera de pago
     if Pedido.objects.filter(cliente = cliente, pagado = False, codigo = carrito.codigo):
         #Obtener el pedido y los pedido_detalle correspondiente
         pedido = get_object_or_404(Pedido, cliente = cliente, pagado = False, codigo = carrito.codigo)
-        pedido_detalle = Detalle_pedido.objects.filter(pedido = pedido)
         #Actualizar el pedido con los datos del carrito
         pedido.es_envio_domicilio      = carrito.es_envio_domicilio
         pedido.costo_envio             = carrito.costo_envio
@@ -376,18 +376,37 @@ def pagar(request):
             fecha_programada        = carrito.fecha_programada,
             fecha_entregado         = None,
             entregado               = False)
-        pedido.pedido_fecha_compra()
-        pedido.save()
-        #También crea los pedido detalle
-        for p in productos:
+    pedido.pedido_fecha_compra()
+    pedido.save()
+    
+    #-----PEDIDO_DETALLE
+    for p in productos:
             for c in carrito_detalle:
                 if c.producto.id == p.id:
-                    pedido_detalle = Detalle_pedido(
-                        pedido = pedido,
-                        producto = p,
-                        cantidad_producto = c.cantidad_producto,
-                        subtotal = c.subtotal)
-                    pedido_detalle.save()
+                    #coincide carrito con producto
+                    #si en el detalle_pedido hay un producto con esa id, actualizar
+                    if Detalle_pedido.objects.filter(pedido = pedido, producto=p): 
+                        pedido_detalle = get_object_or_404(Detalle_pedido,pedido = pedido, producto = p)
+                        pedido_detalle.cantidad_producto = c.cantidad_producto
+                        pedido_detalle.subtotal = c.subtotal
+                        pedido_detalle.save()
+                    else:
+                        #si no, crear
+                        pedido_detalle_nuevo = Detalle_pedido(
+                                    pedido = pedido,
+                                    producto = p,
+                                    cantidad_producto = c.cantidad_producto,
+                                    subtotal = c.subtotal)
+                        pedido_detalle_nuevo.save()
+                        
+    pedido_detalle = Detalle_pedido.objects.filter(pedido = pedido)
+    #si en el pedido detalle quedó algun producto que ya se quitó del carrito, que se borre de aca tbn
+    for d in pedido_detalle:
+        prod = get_object_or_404(Producto, id = d.producto.id)
+        if not Carrito_detalle.objects.filter(carrito = request.user.id, producto = prod):
+            d.delete()
+            
+    pedido_detalle = Detalle_pedido.objects.filter(pedido = pedido)
     
     data = {
         'productos_carrito' : carrito_detalle,
@@ -395,9 +414,11 @@ def pagar(request):
         'carrito'           : carrito,
         'cliente'           : cliente,
         'pedido'            : pedido,
-        'pedido_detalle'    : pedido_detalle
+        'pedido_detalle'    : pedido_detalle,
+        'carrito_detalle'   : carrito_detalle
     }
     return render(request, 'web/pagar.html', data)
+
 
 def pedido_metodo_pago(request, id):
     metodo_pago = Tipo_pago.objects.get(id=id)
@@ -407,6 +428,7 @@ def pedido_metodo_pago(request, id):
     pedido.save()
     messages.success(request, f"Método de pago: {pedido.metodo_pago}")
     return redirect(to='pagar')
+
 
 def confirmacion_pedido(request):
     cliente     = get_object_or_404(Cliente, pk = request.user.id)
@@ -448,5 +470,4 @@ def estadisticas(request):
     data = {
         'pedidos' : pedidos
     }
-    
     return render(request, 'web/estadisticas/estadisticas.html', data)

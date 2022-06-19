@@ -117,6 +117,9 @@
                 <div class="SOLO_PARA_DEBUG">
                     <h4>DEBUG MODE</h4>
                     <hr>
+                    <h6>cant_carrito_detalle: {{ cant_car_det }}</h6>
+                    <h6>cant_pedido_detalle: {{ cant_ped_det }}</h6>
+                    <hr>
                     <h5> DB PEDIDO </h5>
                     <h6>cliente: {{ pedido.cliente }}</h6>
                     <h6>codigo: {{ pedido.codigo }}</h6>
@@ -148,6 +151,26 @@
                     <h6>fecha_entrega_estimada: {{ carrito.fecha_entrega_estimada }}</h6>
                     <h6>es_programado: {{ carrito.es_programado }}</h6>
                     <h6>fecha_programada: {{ carrito.fecha_programada }}</h6>
+                    <hr>
+                    <h5> DB CARRITO_detalle </h5>
+                    {% for c in carrito_detalle %}
+                    <h6>carrito: {{ c.carrito }}</h6>
+                    <h6>producto: {{ c.producto }}</h6>
+                    <h6>producto: {{ c.producto.id }}</h6>
+                    <h6>cantidad_producto: {{ c.cantidad_producto }}</h6>
+                    <h6>subtotal: {{ c.subtotal }}</h6>
+                    <hr>
+                    {% endfor %}
+                    <h5> DB PEDIDO_detalle </h5>
+                    {% for d in pedido_detalle %}
+                    <h6>pedido: {{ d.pedido }}</h6>
+                    <h6>producto: {{ d.producto }}</h6>
+                    <h6>producto: {{ d.producto.id }}</h6>
+                    <h6>cantidad_producto: {{ d.cantidad_producto }}</h6>
+                    <h6>subtotal: {{ d.subtotal }}</h6>
+                    <hr>
+                    {% endfor %}
+                    <h1>{{ aloja }}</h1>
                 </div>
             </div>
         </div>

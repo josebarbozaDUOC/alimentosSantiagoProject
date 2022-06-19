@@ -1,6 +1,7 @@
 {% extends 'web/base.html' %}
 {% load static %}
 {% block css %}
+<link rel="stylesheet" href="{% static 'web/css/charts.css' %}">
 {% endblock %}
 {% block js %}
 {% endblock %}
@@ -13,6 +14,27 @@
             <h5>Estadísticas Financieras</h5>
             <br>
             {% if pedidos %}
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="btn-group btn-group-toggle " data-toggle="buttons" id="fecha">
+                            <input type="radio" class="btn-check form-check-input" name="optionsChart" 
+                            id="optionsChart" autocomplete="off" value="option1" checked>
+                            <label class="form-check-label btn btn-outline-danger btn-sm active" for="optionsChart">
+                            <h6 class="col checkName">Últimos 7 días</h6></label>
+
+                            <input type="radio" class="btn-check form-check-input" name="optionsChart" 
+                            id="optionsChart" autocomplete="off" value="option2" >
+                            <label class="form-check-label btn btn-outline-danger btn-sm" for="optionsChart">
+                            <h6 class="col checkName">Últimos 30 días</h6></label>
+                        </div>
+
+                        <div class="chartCol">
+                        </div>
+                    </div>
+                </div>
+
                 {% for pedido in pedidos %}
                     <div class="card">
                         <div class="card-body">
