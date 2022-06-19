@@ -28,13 +28,13 @@
             <hr>
             <!---si NO HAY producto en el carrito-->
             {% if not productos_carrito %}
-            <div class="col carrito-vacio">
-                <div class="carrito-img-container">
+            <div class="col carrito-vacio text-center">
+                <div class="carrito-img-container row">
                     <a href="{% url 'home' %}"><img src="{% static 'web/img/dishImg_sm.png' %}" class="carrito-img" alt=""></a>
                 </div>
                 <br>
-                <h4 class="text-center">Tu carrito está vacío</h4>
-                <h5 class="text-center">Los mejores platos están esperando</h5>
+                <h4>Tu carrito está vacío</h4>
+                <h5>Los mejores platos están esperando</h5>
                 <br>
             </div>
             {% else %}
