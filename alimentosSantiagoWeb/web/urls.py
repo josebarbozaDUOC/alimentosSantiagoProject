@@ -2,7 +2,7 @@ from django.urls import path
 from .views import home, registro, agregar_producto, listar_productos, modificar_producto, \
     eliminar_producto, perfil_usuario, \
     carrito_compras, agregar_a_carrito, eliminar_producto_carrito, pagar, restar_cantidad, sumar_cantidad, \
-    opciones_pedido, pedido_programado, pedido_metodo_pago, confirmacion_pedido, \
+    opciones_pedido, pedido_programado, pedido_metodo_pago, confirmacion_pedido, pedido_entregado, \
     estadisticas
     
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path('pagar', pagar, name="pagar"),
     path('pedido-metodo-pago/<id>/', pedido_metodo_pago, name="pedido_metodo_pago"),
     path('confirmacion-pedido', confirmacion_pedido, name="confirmacion_pedido"),
+    path('pedido-entregado/<id>/', pedido_entregado, name="pedido_entregado"),
     path('estadisticas', estadisticas, name="estadisticas"),
 ]
 

@@ -87,7 +87,6 @@ def registro(request):
 def perfil_usuario(request):
     #request.user es la data del User logeado
     cliente = get_object_or_404(Cliente, pk = request.user.id)
-    
 ###-----------PODRÍA HABER UN BUG SI HAY MÁS DE UN PEDIDO ACTIVO A LA VEZ
     #Busca y rescata algun pedido actual
     if Pedido.objects.filter(cliente = request.user.id, pagado = True, entregado = False):
@@ -100,7 +99,10 @@ def perfil_usuario(request):
                 idtab               = 'pedidoOpen'
                 dia_entrega_est     = pedidos[0].dia_entrega_est()
                 hora_entrega_est    = pedidos[0].hora_entrega_est()
-    else: 
+                reloj_fecha         = pedidos[0].reloj_fecha()
+                reloj_hora          = pedidos[0].reloj_hora()
+                id_pedido           = pedidos[0].id
+    else:
         pedidos             = None
         pedido_detalle      = None
         productos           = None
@@ -108,6 +110,9 @@ def perfil_usuario(request):
         idtab               = 'perfilOpen'
         dia_entrega_est     = ''
         hora_entrega_est    = ''
+        reloj_fecha         = ''
+        reloj_hora          = ''
+        id_pedido           = ''
     
     #Busca y rescata algun pedido ya entregado HISTORIAL
     if Pedido.objects.filter(cliente = request.user.id, pagado = True, entregado = True):
@@ -134,7 +139,10 @@ def perfil_usuario(request):
     'hay_pedido_activo'         : hay_pedido_activo,
     'idtab'                     : idtab,
     'dia_entrega_est'           : dia_entrega_est,
-    'hora_entrega_est'          : hora_entrega_est
+    'hora_entrega_est'          : hora_entrega_est,
+    'reloj_fecha'               : reloj_fecha,
+    'reloj_hora'                : reloj_hora,
+    'id_pedido'                 : id_pedido
     }
     if request.method == 'POST':
         formulario = ClienteForm(data=request.POST, instance=cliente)
@@ -149,7 +157,12 @@ def perfil_usuario(request):
     
     return render(request, 'web/perfil_usuario.html', data)
 
-
+def pedido_entregado(request, id):
+    pedido = get_object_or_404(Pedido,id=id, cliente = request.user.id, pagado = True, entregado = False)
+    pedido.pedido_entregado()
+    pedido.save()
+    messages.success(request, "Pedido Entregado")
+    return redirect(to='perfil_usuario')
 #--------------------------------------------CRUD PRODUCTOS
 
 def listar_productos(request):

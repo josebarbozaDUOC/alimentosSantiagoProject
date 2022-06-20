@@ -119,6 +119,9 @@ def pedido_ahora():
 def ajuste_hora_chile(fecha):
     fecha -= timedelta(hours=4)
     return fecha.strftime('%H:%M')
+def ajuste_hora_chile_segs(fecha):
+    fecha -= timedelta(hours=4)
+    return fecha.strftime('%H:%M:%S')
 
 def create_cod():
     cod = str(uuid.uuid1())
@@ -230,7 +233,11 @@ class Pedido(models.Model):
         
     fecha_entregado         = models.DateTimeField(blank=True, null=True, default=pedido_espera)
     entregado               = models.BooleanField(default=False)
-    ##calificación del pedido | estrellitas
+    
+    def pedido_entregado(self):
+        self.entregado = True
+        self.fecha_entregado = pedido_ahora()
+    
     def pedido_fecha_compra(self):
         self.fecha_compra = pedido_ahora()
     
@@ -243,6 +250,13 @@ class Pedido(models.Model):
         a = ajuste_hora_chile(self.fecha_entrega_estimada)
         return a
     
+    def reloj_fecha(self):
+        return self.fecha_entrega_estimada.strftime('%d-%m-%Y')
+    def reloj_hora(self):
+        b = ajuste_hora_chile_segs(self.fecha_entrega_estimada)
+        return b
+    
+    ##calificación del pedido | estrellitas
     #to string ???????????????????
 
 class Detalle_pedido(models.Model):
