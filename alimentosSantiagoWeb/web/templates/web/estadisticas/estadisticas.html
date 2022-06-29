@@ -3,8 +3,37 @@
 {% block css %}
 <link rel="stylesheet" href="{% static 'web/css/charts.css' %}">
 {% endblock %}
+
 {% block js %}
+<!---Chart.js-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+
+<script>
+    var total           = "{{ monto_total_pedidos |safe }}";
+    var total_envio     = "{{ monto_total_pedidos_envio |safe }}";
+    var total_retiro    = "{{ monto_total_pedidos_retiro |safe }}";
+    var total_prog      = "{{ monto_total_pedidos_prog |safe }}";
+    var total_no_prog   = "{{ monto_total_pedidos_no_prog |safe }}";
+    var cant            = "{{ cant_total_productos |safe }}";
+    var cant_envio      = "{{ cant_total_productos_envio |safe }}";
+    var cant_retiro     = "{{ cant_total_productos_retiro |safe }}";
+    var cant_prog       = "{{ cant_total_productos_prog |safe }}";
+    var cant_no_prog    = "{{ cant_total_productos_no_prog |safe }}";
+    
+    let ventas7dias     = "{{ventas_ult_7_dias |safe}}".split(',');
+    let fechas7dias     = "{{fechas_ult_7_dias |safe}}".split(',');
+
+    let ventas30dias    = "{{ventas_ult_30_dias |safe}}".split(',');
+    let fechas30dias    = "{{fechas_ult_30_dias |safe}}".split(',');
+
+    let ventas6meses    = "{{ventas_ult_6_meses |safe}}".split(',');
+    let fechas6meses    = "{{fechas_ult_6_meses |safe}}".split(',');
+</script>
+
+<script src="{% static 'web/js/stats_chartjs.js' %}"></script>
 {% endblock %}
+
 {% block contenido %}
 {% load humanize %}
 <br><br>
@@ -14,27 +43,91 @@
             <h5>Estadísticas Financieras</h5>
             <br>
             {% if pedidos %}
-
                 <div class="card">
                     <div class="card-body">
 
-                        <div class="btn-group btn-group-toggle " data-toggle="buttons" id="fecha">
-                            <input type="radio" class="btn-check form-check-input" name="optionsChart" 
-                            id="optionsChart" autocomplete="off" value="option1" checked>
-                            <label class="form-check-label btn btn-outline-danger btn-sm active" for="optionsChart">
-                            <h6 class="col checkName">Últimos 7 días</h6></label>
-
-                            <input type="radio" class="btn-check form-check-input" name="optionsChart" 
-                            id="optionsChart" autocomplete="off" value="option2" >
-                            <label class="form-check-label btn btn-outline-danger btn-sm" for="optionsChart">
-                            <h6 class="col checkName">Últimos 30 días</h6></label>
+                        <!---TOTALES-->
+                        <div class="row">
+                            <div class="col">
+                                <h4>Monto Total de Ventas</h4>
+                                <h6>Todos los pedidos</h6>
+                                <h1>${{ monto_total_pedidos | intcomma |safe }}</h1>
+                            </div>
                         </div>
+                        <hr>
 
-                        <div class="chartCol">
+                        <div class="row">
+                            <div class="col">
+                                <h4>Cantidad Total de Ventas</h4>
+                                <h6>Todos los pedidos</h6>
+                                <h1>{{ cant_total_pedidos | intcomma |safe }}</h1>
+                            </div>
+                            <div class="col">
+                                <h4>Cantidad Total de Productos Vendidos</h4>
+                                <h6>Todos los pedidos</h6>
+                                <h1>{{ cant_total_productos | intcomma |safe }}</h1>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <!---torta 5 productos más vendidos-->
+
+                        <!---Chart.JS-->
+                        <!---30dias-->
+                        <div class="container chartCol">
+                            <h4>Ventas Últimos 30 días</h4>
+                            <canvas id="barChart_30"></canvas>
+                        </div>
+                        <br><hr><br>
+
+                        <div class="row">
+                            <!---7dias-->
+                            <div class="container chartCol col">
+                                <h4>Ventas Últimos 7 días</h4>
+                                <canvas id="barChart_7"></canvas>
+                            </div>
+                            <!---6meses-->
+                            <div class="container chartCol col">
+                                <h4>Ventas Últimos 6 Meses</h4>
+                                <canvas id="barChart_6"></canvas>
+                            </div>
+                        </div>
+                        <br><hr><br>
+
+                        <!---envio/retiro-->
+                        <div class="row">
+                            <div class="container chartCol col">
+                                <h4>Envio/Retiro</h4>
+                                <h5>Monto Total Ventas</h5>
+                                <canvas id="barChart_envio"></canvas>
+                            </div>
+                            <div class="container chartCol col">
+                                <h4>Envio/Retiro</h4>
+                                <h5>Cantidad de Productos Vendidos</h5>
+                                <canvas id="barChart_envioCant"></canvas>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <!---Programado/No Programado-->
+                        <div class="row">
+                            <div class="container chartCol col">
+                                <h4>Programado/No Programado</h4>
+                                <h5>Monto Total Ventas</h5>
+                                <canvas id="barChart_prog"></canvas>
+                            </div>
+                            <div class="container chartCol col">
+                                <h4>Programado/No Programado</h4>
+                                <h5>Cantidad de Productos Vendidos</h5>
+                                <canvas id="barChart_progCant"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <br><br>
+                <!---Lista de todos los pedidos--->
+                <h3>Lista de todos los pedidos</h3>
                 {% for pedido in pedidos %}
                     <div class="card">
                         <div class="card-body">

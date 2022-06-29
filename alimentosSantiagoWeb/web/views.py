@@ -1,3 +1,4 @@
+from calendar import month
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm, ProductoForm, CarritoForm, ClienteForm
 from django.core.paginator import Paginator
@@ -82,6 +83,8 @@ def registro(request):
     #return render(request, 'registration/registro_modal.html', data)
     
 
+
+
 #DESDE EL PERFIL USUARIO, SE DEBIESE MANDAR UNA ALERTA CUANDO SE CUMPLA EL TIEMPO
 #DE ENTREGA, ASÍ EL PEDIDO PASA A ENTREGADO, Y AL HISTORIAL
 def perfil_usuario(request):
@@ -156,6 +159,8 @@ def perfil_usuario(request):
             data['formUser'] = formUser
     
     return render(request, 'web/perfil_usuario.html', data)
+
+
 
 def pedido_entregado(request, id):
     pedido = get_object_or_404(Pedido,id=id, cliente = request.user.id, pagado = True, entregado = False)
@@ -478,9 +483,138 @@ def confirmacion_pedido(request):
 
 def estadisticas(request):
     
-    pedidos = Pedido.objects.filter(cliente = request.user.id, pagado = True)
+    pedidos = Pedido.objects.filter(cliente = request.user.id, pagado = True).order_by('-fecha_compra')
+    
+    promedio_monto_total_pedidos = 0
+    
+    monto_total_pedidos         = 0
+    monto_total_pedidos_envio   = 0
+    monto_total_pedidos_retiro  = 0
+    monto_total_pedidos_prog    = 0
+    monto_total_pedidos_no_prog    = 0
+    
+    cant_total_pedidos          = 0
+    cant_total_pedidos_envio    = 0
+    cant_total_pedidos_retiro   = 0
+    cant_total_pedidos_prog     = 0
+    cant_total_pedidos_no_prog     = 0
+    
+    cant_total_productos        = 0
+    cant_total_productos_envio  = 0
+    cant_total_productos_retiro = 0
+    cant_total_productos_prog   = 0
+    cant_total_productos_no_prog   = 0
+    
+    ventas_ult_7_dias          = []
+    fechas_ult_7_dias          = []
+    ventas_ult_30_dias         = []
+    fechas_ult_30_dias         = []
+    ventas_ult_6_meses         = []
+    fechas_ult_6_meses         = []
+    
+    dict_fecha_monto = {
+        "fecha": "",
+        "monto": ""
+        }
+    
+    #---------------------ultimos 7 dias
+    #if pedidos, en caso de que no existan pedidos
+    for i in range(7):
+        suma = 0
+        fecha_comparar = datetime.now() - timedelta(days=i)
+        fecha_comparar = fecha_comparar.strftime('%d-%m-%Y')
+        for p in pedidos:
+            fecha_pedido = p.fecha_compra.strftime('%d-%m-%Y')
+            if fecha_pedido == fecha_comparar:
+                suma += p.total
+        fechas_ult_7_dias.append(fecha_comparar)
+        ventas_ult_7_dias.append(suma)
+    fechas_ult_7_dias.reverse()
+    ventas_ult_7_dias.reverse()
+    
+    #---------------------ultimos 30 dias
+    #if pedidos, en caso de que no existan pedidos
+    for i in range(30):
+        suma = 0
+        fecha_comparar = datetime.now() - timedelta(days=i)
+        fecha_comparar = fecha_comparar.strftime('%d-%m-%Y')
+        for p in pedidos:
+            fecha_pedido = p.fecha_compra.strftime('%d-%m-%Y')
+            if fecha_pedido == fecha_comparar:
+                suma += p.total
+        fechas_ult_30_dias.append(fecha_comparar)
+        ventas_ult_30_dias.append(suma)
+    fechas_ult_30_dias.reverse()
+    ventas_ult_30_dias.reverse()
+    
+    #---------------------ultimos 6 meses
+    #if pedidos, en caso de que no existan pedidos
+    for i in range(6):
+        suma = 0
+        fecha_comparar = datetime.now() - timedelta(days=i*30)
+        fecha_comparar = fecha_comparar.strftime('%m-%Y')
+        for p in pedidos:
+            fecha_pedido = p.fecha_compra.strftime('%m-%Y')
+            if fecha_pedido == fecha_comparar:
+                suma += p.total
+        fechas_ult_6_meses.append(fecha_comparar)
+        ventas_ult_6_meses.append(suma)
+    fechas_ult_6_meses.reverse()
+    ventas_ult_6_meses.reverse()
+    
+    #---------------------TODOS LOS PEDIDOS
+    # Monto total obtenido de pedidos, todos los pedidos
+    for p in pedidos:
+        monto_total_pedidos += p.total        
+        cant_total_pedidos += 1
+        cant_total_productos  += p.num_productos
         
+        # Monto total obtenido de pedidos, solo pedidos ENVIO
+        if p.es_envio_domicilio == True:
+            monto_total_pedidos_envio += p.total
+            cant_total_pedidos_envio += 1
+            cant_total_productos_envio  += p.num_productos
+        # Monto total obtenido de pedidos, solo pedidos RETIRO
+        elif p.es_envio_domicilio == False:
+            monto_total_pedidos_retiro += p.total
+            cant_total_pedidos_retiro += 1
+            cant_total_productos_retiro  += p.num_productos
+        # Monto total obtenido de pedidos, solo pedidos PROGRAMADOS
+        if p.es_programado == True:
+            monto_total_pedidos_prog += p.total
+            cant_total_pedidos_prog += 1
+            cant_total_productos_prog  += p.num_productos
+        # Monto total obtenido de pedidos, solo pedidos NO PROGRAMADOS
+        elif p.es_programado == False:
+            monto_total_pedidos_no_prog += p.total
+            cant_total_pedidos_no_prog += 1
+            cant_total_productos_no_prog  += p.num_productos
+    
     data = {
-        'pedidos' : pedidos
+        'pedidos'                       : pedidos,
+        'monto_total_pedidos'           : monto_total_pedidos,
+        'monto_total_pedidos_envio'     : monto_total_pedidos_envio,
+        'monto_total_pedidos_retiro'    : monto_total_pedidos_retiro,
+        'monto_total_pedidos_prog'      : monto_total_pedidos_prog,
+        'monto_total_pedidos_no_prog'   : monto_total_pedidos_prog,
+        
+        'cant_total_pedidos'            : cant_total_pedidos,
+        'cant_total_pedidos_envio'      : cant_total_pedidos_envio,
+        'cant_total_pedidos_retiro'     : cant_total_pedidos_retiro,
+        'cant_total_pedidos_prog'       : cant_total_pedidos_prog,
+        'cant_total_pedidos_no_prog'    : cant_total_pedidos_no_prog,
+        
+        'cant_total_productos'          : cant_total_productos,
+        'cant_total_productos_envio'    : cant_total_productos_envio,
+        'cant_total_productos_retiro'   : cant_total_productos_retiro,
+        'cant_total_productos_prog'     : cant_total_productos_prog,
+        'cant_total_productos_no_prog'  : cant_total_productos_prog,
+        
+        'ventas_ult_7_dias'             : ventas_ult_7_dias,
+        'fechas_ult_7_dias'             : fechas_ult_7_dias,
+        'ventas_ult_30_dias'            : ventas_ult_30_dias,
+        'fechas_ult_30_dias'            : fechas_ult_30_dias,
+        'ventas_ult_6_meses'            : ventas_ult_6_meses,
+        'fechas_ult_6_meses'            : fechas_ult_6_meses
     }
     return render(request, 'web/estadisticas/estadisticas.html', data)
