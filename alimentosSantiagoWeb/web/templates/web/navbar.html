@@ -32,11 +32,11 @@
                     <hr>
                     <a href="{% url 'home' %}"><i class="bi bi-house"></i> Inicio</a>
                     <hr>
-                    {% if perms.web.view_proveedor %}
+                    {% if perms.web.view_proveedor and not perms.web.add_tipo_pago %}
                     <a href="{% url 'proveedor' %}"><i class="bi bi-stack"></i> Proveedor</a>
                     <hr>
                     {% endif %}
-                    {% if perms.web.view_repartidor %}
+                    {% if perms.web.view_repartidor and not perms.web.add_tipo_pago %}
                     <a href="{% url 'repartidor' %}"><i class="bi bi-truck"></i> Repartidor</a>
                     <hr>
                     {% endif %}
