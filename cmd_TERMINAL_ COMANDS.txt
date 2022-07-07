@@ -2,6 +2,7 @@
 #------Orden para correr este proyecto
 #------Ejecutar los sgtes comandos en orden:
 .\ambientev\Scripts\activate 
+pip install -r requirements.txt
 python alimentosSantiagoWeb\manage.py runserver
 
 
