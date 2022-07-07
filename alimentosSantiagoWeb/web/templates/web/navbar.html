@@ -7,7 +7,7 @@
 
     <!-- LOGO -->
     <div class="col-md-8 d-flex">
-        <a href="{% url 'home' %}"><img src="{% static 'web/img/pedidocomida_logo3.png' %}" class="logo"/></a>
+        <a href="{% url 'home' %}"><img src="{% static 'web/img/pedidocomida_logoRe_2.png' %}" class="logo"/></a>
     </div>
 
     <!-- PERFIL -->
@@ -25,18 +25,18 @@
                     <!-- Button to close the overlay navigation -->
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 
-                    <!--- contenido del sidebar-->
+                    <!--- contenido del sidebar and not perms.web.add_tipo_pago-->
                     <div class="d-inline ">
                         <h5 class="profile-name d-inline "><i class="bi bi-at"></i>{{ user.username | capfirst }}</h5>
                     </div> 
                     <hr>
                     <a href="{% url 'home' %}"><i class="bi bi-house"></i> Inicio</a>
                     <hr>
-                    {% if perms.web.view_proveedor and not perms.web.add_tipo_pago %}
+                    {% if perms.web.view_proveedor %}
                     <a href="{% url 'proveedor' %}"><i class="bi bi-stack"></i> Proveedor</a>
                     <hr>
                     {% endif %}
-                    {% if perms.web.view_repartidor and not perms.web.add_tipo_pago %}
+                    {% if perms.web.view_repartidor %}
                     <a href="{% url 'repartidor' %}"><i class="bi bi-truck"></i> Repartidor</a>
                     <hr>
                     {% endif %}

@@ -6,7 +6,7 @@ from django.http import Http404
 from django.contrib.auth import authenticate, login
 from .models import Producto, Cliente, Carrito, Carrito_detalle, Tipo_producto, Pedido, \
     Detalle_pedido, Tipo_pago, Proveedor, Repartidor, Empresa_convenio, Cliente_convenio
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission, Group
 from django.db.models import Subquery
 from django.contrib import messages
 from datetime import datetime, timedelta
@@ -641,6 +641,8 @@ def proveedor(request):
     return render(request, 'web/proveedor/proveedor.html', data)
 
 def repartidor(request):
+    if Permission.codename == 'view_repartidor':
+        pass
     data = {
         
     }
@@ -651,10 +653,12 @@ def permisos(request):
     clientes_convenio   = Cliente_convenio.objects.all()
     proveedores         = Proveedor.objects.all()
     repartidores        = Repartidor.objects.all()
+    permisos            = Permission.objects.all()
     data = {
         'usuarios'           : usuarios,
         'clientes_convenio'  : clientes_convenio,
         'proveedores'        : proveedores,
-        'repartidores'       : repartidores
+        'repartidores'       : repartidores,
+        'permisos'           : permisos
     }
     return render(request, 'web/administrador/permisos.html', data)

@@ -1,7 +1,9 @@
+#------Si es primera vez que ejecuta este proyecto
 #------Orden para correr este proyecto
 #------Ejecutar los sgtes comandos en orden:
 .\ambientev\Scripts\activate 
 python alimentosSantiagoWeb\manage.py runserver
+
 
 
 #-------------------------------COMANDOS clave CMD o TERMINAL

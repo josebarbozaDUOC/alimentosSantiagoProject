@@ -1,5 +1,4 @@
 from distutils.command.upload import upload
-import email
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User #para acceder al user de la base de datos
@@ -276,6 +275,16 @@ class Detalle_pedido(models.Model):
 class Proveedor(models.Model):
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
     restaurant      = models.ForeignKey(Restaurant, on_delete=models.PROTECT)
+    #direccion_local = models.CharField(max_length=100)
+    #rut             = models.CharField(max_length=10)       ####?????
+    
+    def __str__(self):
+        return self.user.username
+
+class Proveedor_productos(models.Model):
+    proveedor           = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    producto            = models.ForeignKey(Producto, on_delete=models.PROTECT)
+    cantidad_producto   = models.IntegerField()
     #direccion_local = models.CharField(max_length=100)
     #rut             = models.CharField(max_length=10)       ####?????
     
