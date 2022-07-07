@@ -1,7 +1,17 @@
 # alimentosSantiagoProject
 eCommerce Project Web + Django
 
-COSITAS:
+-------------------------------------------------------------------------------------------
+#------Si es primera vez que ejecuta este proyecto
+#------Orden para correr este proyecto
+#------Ejecutar los sgtes comandos en orden:
+.\ambientev\Scripts\activate 
+pip install -r requirements.txt
+python alimentosSantiagoWeb\manage.py runserver
+
+-------------------------------------------------------------------------------------------
+
+Funcionalidades:
 AUTH: Login, Register,  
 USER: Admin, Cliente,
 PAGE: Home, 
