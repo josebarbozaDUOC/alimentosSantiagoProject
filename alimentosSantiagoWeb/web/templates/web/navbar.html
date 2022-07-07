@@ -32,11 +32,23 @@
                     <hr>
                     <a href="{% url 'home' %}"><i class="bi bi-house"></i> Inicio</a>
                     <hr>
+                    {% if perms.web.view_proveedor and not perms.web.add_tipo_pago %}
+                    <a href="{% url 'proveedor' %}"><i class="bi bi-stack"></i> Proveedor</a>
+                    <hr>
+                    {% endif %}
+                    {% if perms.web.view_repartidor and not perms.web.add_tipo_pago %}
+                    <a href="{% url 'repartidor' %}"><i class="bi bi-truck"></i> Repartidor</a>
+                    <hr>
+                    {% endif %}
                     <a href="{% url 'perfil_usuario' %}"><i class="bi bi-person-circle"></i> Opciones Perfil</a>
                     <a href="{% url 'carrito_compras' %}"><i class="bi bi-cart3"></i> Carrito Compras</a>
                     {% if perms.web.add_tipo_pago %}
                     <hr>
                     <a href="{% url 'estadisticas' %}"><i class="bi bi-bar-chart-line"></i> Estadísticas</a>
+                    
+                    <hr>
+                    <a href="{% url 'permisos' %}"><i class="bi bi-star"></i> Privilegios</a>
+                    
                     {% endif %}
                     {% if perms.web.view_producto %}
                     <hr>
@@ -45,6 +57,8 @@
                     {% if perms.web.add_producto %}
                     <a href="{% url 'agregar_producto' %}"><i class="bi bi-plus-circle"></i> Agregar Platos</a>
                     {% endif %}
+                    <hr>
+                    <a href="{% url 'contacto' %}"><i class="bi bi-envelope"></i> Contacto</a>
                     <hr>
                     <a href="{% url 'logout' %}"><i class="bi bi-power"></i> Cerrar Sesión</a>
                     <hr>

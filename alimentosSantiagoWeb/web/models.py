@@ -311,9 +311,7 @@ class Cliente_convenio(models.Model):
 
 '''
 #crear tabla:
-# Empresa_convenio (direccion_entrega, monto_cargar_saldo, num_trabajadores)
-# Cliente_empresa_convenio (id_empresa, id_cliente) #para saber que clientes tienen convenio
-# Repartidor (user, en_reparto)
+##### Contacto_mensajes
 ##### Direccion_local o Direcciones         #para mantener multiples direcciones
 ##### Menu (dias_semana[], producto[])      #sería como un google calendar?
 '''

@@ -114,64 +114,6 @@
                     >Confirmar Compra</a>
                 </div>
                 <hr>
-                <div class="SOLO_PARA_DEBUG">
-                    <h4>DEBUG MODE</h4>
-                    <hr>
-                    <h6>cant_carrito_detalle: {{ cant_car_det }}</h6>
-                    <h6>cant_pedido_detalle: {{ cant_ped_det }}</h6>
-                    <hr>
-                    <h5> DB PEDIDO </h5>
-                    <h6>cliente: {{ pedido.cliente }}</h6>
-                    <h6>codigo: {{ pedido.codigo }}</h6>
-                    <h6>metodo_pago: {{ pedido.metodo_pago }}</h6>
-                    <h6>es_envio_domicilio: {{ pedido.es_envio_domicilio }}</h6>
-                    <h6>costo_envio: {{ pedido.costo_envio }}</h6>
-                    <h6>subtotal: {{ pedido.subtotal }}</h6>
-                    <h6>total: {{ pedido.total }}</h6>
-                    <h6>num_productos: {{ pedido.num_productos }}</h6>
-                    <h6>fecha_compra: {{ pedido.fecha_compra }}</h6>
-                    <h6>pagado: {{ pedido.pagado }}</h6>
-                    <h6>tiempo_entrega_est: {{ pedido.tiempo_entrega_est }}</h6>
-                    <h6>fecha_entrega_estimada: {{ pedido.fecha_entrega_estimada }}</h6>
-                    <h6>es_programado: {{ pedido.es_programado }}</h6>
-                    <h6>fecha_programada: {{ pedido.fecha_programada }}</h6>
-                    <h6>fecha_entregado: {{ pedido.fecha_entregado }}</h6>
-                    <h6>entregado: {{ pedido.entregado }}</h6>
-                    <hr>
-                    <h5> DB CARRITO </h5>
-                    <h6>cliente: {{ carrito.cliente }}</h6>
-                    <h6>codigo: {{ carrito.codigo }}</h6>
-                    <h6>numero_productos: {{ carrito.numero_productos }}</h6>
-                    <h6>descuento: {{ carrito.descuento }}</h6>
-                    <h6>subtotal: {{ carrito.subtotal }}</h6>
-                    <h6>total: {{ carrito.total }}</h6>
-                    <h6>es_envio_domicilio: {{ carrito.es_envio_domicilio }}</h6>
-                    <h6>costo_envio: {{ carrito.costo_envio }}</h6>
-                    <h6>tiempo_entrega_estimado: {{ carrito.tiempo_entrega_estimado }}</h6>
-                    <h6>fecha_entrega_estimada: {{ carrito.fecha_entrega_estimada }}</h6>
-                    <h6>es_programado: {{ carrito.es_programado }}</h6>
-                    <h6>fecha_programada: {{ carrito.fecha_programada }}</h6>
-                    <hr>
-                    <h5> DB CARRITO_detalle </h5>
-                    {% for c in carrito_detalle %}
-                    <h6>carrito: {{ c.carrito }}</h6>
-                    <h6>producto: {{ c.producto }}</h6>
-                    <h6>producto: {{ c.producto.id }}</h6>
-                    <h6>cantidad_producto: {{ c.cantidad_producto }}</h6>
-                    <h6>subtotal: {{ c.subtotal }}</h6>
-                    <hr>
-                    {% endfor %}
-                    <h5> DB PEDIDO_detalle </h5>
-                    {% for d in pedido_detalle %}
-                    <h6>pedido: {{ d.pedido }}</h6>
-                    <h6>producto: {{ d.producto }}</h6>
-                    <h6>producto: {{ d.producto.id }}</h6>
-                    <h6>cantidad_producto: {{ d.cantidad_producto }}</h6>
-                    <h6>subtotal: {{ d.subtotal }}</h6>
-                    <hr>
-                    {% endfor %}
-                    <h1>{{ aloja }}</h1>
-                </div>
             </div>
         </div>
     </div>

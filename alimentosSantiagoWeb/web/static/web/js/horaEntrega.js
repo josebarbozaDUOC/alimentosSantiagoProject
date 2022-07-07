@@ -26,10 +26,10 @@ function currentTime() {
     //if comparativo
     if (pedidoFecha <= fecha){
         if (pedidoHora <= hora){
-            document.getElementById("pedidoEntregado").innerText = 'Si';   
+            document.getElementById("pedidoEntregado").innerText = 'Entregado';   
             window.location.href = '/pedido-entregado/'+id+'/';
         } else{
-            document.getElementById("pedidoEntregado").innerText = 'No'; 
+            document.getElementById("pedidoEntregado").innerText = 'En despacho'; 
         }
     }
     let t = setTimeout(function(){ currentTime() }, 1000);

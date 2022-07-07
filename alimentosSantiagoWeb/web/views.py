@@ -1,10 +1,12 @@
 from calendar import month
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CustomUserCreationForm, ProductoForm, CarritoForm, ClienteForm
+from .forms import CustomUserCreationForm, ProductoForm, CarritoForm, ClienteForm, EmpresaForm
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth import authenticate, login
-from .models import Producto, Cliente, Carrito, Carrito_detalle, Tipo_producto, Pedido, Detalle_pedido, Tipo_pago
+from .models import Producto, Cliente, Carrito, Carrito_detalle, Tipo_producto, Pedido, \
+    Detalle_pedido, Tipo_pago, Proveedor, Repartidor, Empresa_convenio, Cliente_convenio
+from django.contrib.auth.models import User
 from django.db.models import Subquery
 from django.contrib import messages
 from datetime import datetime, timedelta
@@ -617,4 +619,42 @@ def estadisticas(request):
         'ventas_ult_6_meses'            : ventas_ult_6_meses,
         'fechas_ult_6_meses'            : fechas_ult_6_meses
     }
-    return render(request, 'web/estadisticas/estadisticas.html', data)
+    return render(request, 'web/administrador/estadisticas.html', data)
+
+
+def contacto(request):
+    data = {
+        
+    }
+    return render(request, 'web/empresas/contacto.html', data)
+
+def contacto_empresas(request):
+    data = {
+        'form' : EmpresaForm
+    }
+    return render(request, 'web/empresas/form_empresas.html', data)
+
+def proveedor(request):
+    data = {
+        
+    }
+    return render(request, 'web/proveedor/proveedor.html', data)
+
+def repartidor(request):
+    data = {
+        
+    }
+    return render(request, 'web/repartidor/repartidor.html', data)
+
+def permisos(request):
+    usuarios            = User.objects.all()
+    clientes_convenio   = Cliente_convenio.objects.all()
+    proveedores         = Proveedor.objects.all()
+    repartidores        = Repartidor.objects.all()
+    data = {
+        'usuarios'           : usuarios,
+        'clientes_convenio'  : clientes_convenio,
+        'proveedores'        : proveedores,
+        'repartidores'       : repartidores
+    }
+    return render(request, 'web/administrador/permisos.html', data)

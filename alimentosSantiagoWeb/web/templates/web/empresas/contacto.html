@@ -1,0 +1,27 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block js %}
+{% endblock %}
+{% block contenido %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+<!---contenido-->
+<div class="container-lg">
+    <br><br>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex">
+                <div class="w-100 justify-content-center text-center">
+                    <h3>Contacto</h3>
+                    <hr>
+                    <h6>¿Eres empresa y deseas nuestros servicios?</h6>
+                    <button onclick="location.href='{% url 'contacto_empresas' %}'" type="button" class="btn btn-warning btn">
+                    <i class="bi bi-envelope"></i> Contáctanos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

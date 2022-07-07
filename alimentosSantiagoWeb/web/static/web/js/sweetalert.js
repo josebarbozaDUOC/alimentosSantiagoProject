@@ -29,7 +29,7 @@ function pedidoExitoso(){
     title: '¡Felicidades!',
     text: "Tu pedido se está preparando, llegará: ",
     allowOutsideClick: false,
-    timer: 4000,
+    timer: 6000,
     timerProgressBar: true,
     showClass: {
         popup: 'animate__animated animate__tada'

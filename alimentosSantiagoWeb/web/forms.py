@@ -1,7 +1,7 @@
 from dataclasses import fields
 from pyexpat import model
 from django import forms
-from .models import Carrito, Producto, Cliente
+from .models import Carrito, Producto, Cliente,Empresa_convenio
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
@@ -48,3 +48,8 @@ class CarritoForm(forms.ModelForm):
     class Meta:
         model = Carrito
         fields = ['fecha_programada']
+        
+class EmpresaForm(forms.ModelForm):
+    class Meta:
+        model = Empresa_convenio
+        fields = '__all__'
