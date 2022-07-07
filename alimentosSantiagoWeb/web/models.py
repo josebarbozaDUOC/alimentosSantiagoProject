@@ -1,4 +1,5 @@
 from distutils.command.upload import upload
+import email
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User #para acceder al user de la base de datos
@@ -8,10 +9,27 @@ from datetime import datetime, timedelta
 import uuid
 
 # Create your models here.
-# on_delete= puede ser cascada, o protect
 
+#----------------------FUNCIONES ESPECIALES
+def pedido_espera():
+    return datetime.now() + timedelta(minutes=30)
+def pedido_ahora():
+    return datetime.now() + timedelta(minutes=0)
+def ajuste_hora_chile(fecha):
+    fecha -= timedelta(hours=4)
+    return fecha.strftime('%H:%M')
+def ajuste_hora_chile_segs(fecha):
+    fecha -= timedelta(hours=4)
+    return fecha.strftime('%H:%M:%S')
+
+def create_cod():
+    cod = str(uuid.uuid1())
+    return cod
+
+#------------------------------MODELO PRODUCTO
 class Restaurant(models.Model):
-    nombre = models.CharField(max_length=50)
+    nombre      = models.CharField(max_length=50)
+    direccion   = models.CharField(max_length=100, blank=True, null=True)
     #tiempo_promedio_preparacion
     def __str__(self):
         return self.nombre
@@ -43,6 +61,7 @@ class Producto(models.Model):
     def restar_stock(self, resta):
         self.stock -= resta
 
+#------------------------------MODELO CLIENTE
 class Avatar(models.Model):
     nombre              = models.CharField(max_length=50)
     avatar              = models.ImageField(upload_to="avatar-cliente", null=True)
@@ -98,35 +117,8 @@ class Cliente(models.Model):
     def pagar_con_saldo(self, pago):
         self.saldo -= pago
         #return self.saldo
-    
-class Tipo_pago(models.Model):
-    nombre                  = models.CharField(max_length=50)   #saldo, tarjeta, efectivo
-    def __str__(self):
-        return self.nombre
 
-class Envio(models.Model):
-    nombre                  = models.CharField(max_length=50)   #cerca, lejos
-    descripcion             = models.TextField()                #está a menos de 500mts, a más de 2000mts
-    tiempo_promedio_entrega = models.IntegerField(default=30)   #30 min, 40min
-    costo                   = models.IntegerField()             #1000, 2000
-    def __str__(self):
-        return self.nombre
-
-def pedido_espera():
-    return datetime.now() + timedelta(minutes=30)
-def pedido_ahora():
-    return datetime.now() + timedelta(minutes=0)
-def ajuste_hora_chile(fecha):
-    fecha -= timedelta(hours=4)
-    return fecha.strftime('%H:%M')
-def ajuste_hora_chile_segs(fecha):
-    fecha -= timedelta(hours=4)
-    return fecha.strftime('%H:%M:%S')
-
-def create_cod():
-    cod = str(uuid.uuid1())
-    return cod
-
+#------------------------------MODELO CARRITO
 #cada carrito es unico a cada cliente
 class Carrito(models.Model):
     cliente                 = models.OneToOneField(Cliente, on_delete=models.CASCADE, primary_key=True)
@@ -144,6 +136,7 @@ class Carrito(models.Model):
     es_programado           = models.BooleanField(default=False)
     fecha_programada        = models.DateTimeField(blank=True, null=True, default=pedido_espera) #opcional
     
+    #------------------------------FUNCIONES DEL CARRITO
     def vaciar_carrito(self):
         self.codigo                     = create_cod()
         self.numero_productos           = 0
@@ -209,6 +202,19 @@ class Carrito_detalle(models.Model):
     
     #debiese hacer un def para validar la cantidad no supere el stock del producto comparando id
 
+#------------------------------MODELO PEDIDO
+class Tipo_pago(models.Model):
+    nombre                  = models.CharField(max_length=50)   #saldo, tarjeta, efectivo
+    def __str__(self):
+        return self.nombre
+
+class Envio(models.Model):
+    nombre                  = models.CharField(max_length=50)   #cerca, lejos
+    descripcion             = models.TextField()                #está a menos de 500mts, a más de 2000mts
+    tiempo_promedio_entrega = models.IntegerField(default=30)   #30 min, 40min
+    costo                   = models.IntegerField()             #1000, 2000
+    def __str__(self):
+        return self.nombre
 
 class Pedido(models.Model):
     #va de la mano con Detalle_pedido
@@ -266,21 +272,44 @@ class Detalle_pedido(models.Model):
     cantidad_producto   = models.IntegerField()
     subtotal            = models.IntegerField()
 
-'''
+#------------------------------PREVEEDOR, REPARTIDOR, CLI_EMPRESA
 class Proveedor(models.Model):
-    #al tambien estar ligado al user, tambien será cliente y proveedor
-    #debiese ser solo la PK de user, y no un 1to1
-    #el proveedor solo debe crearse cuando se le dan permisos
-    user            = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
     restaurant      = models.ForeignKey(Restaurant, on_delete=models.PROTECT)
-    direccion_local = models.CharField(max_length=100)
-    rut             = models.CharField(max_length=10)       ####?????
+    #direccion_local = models.CharField(max_length=100)
+    #rut             = models.CharField(max_length=10)       ####?????
     
     def __str__(self):
         return self.user.username
 
+class Repartidor(models.Model):
+    user            = models.ForeignKey(User, on_delete=models.CASCADE)
+    en_reparto      = models.BooleanField(default=False)
+    #rut             = models.CharField(max_length=10)       ####?????
+    
+    def __str__(self):
+        return self.user.username
+
+class Empresa_convenio(models.Model):
+    nombre                  = models.CharField(max_length=50)
+    rut                     = models.CharField(max_length=11)
+    direccion               = models.CharField(max_length=80)
+    email                   = models.CharField(max_length=30)
+    telefono                = models.IntegerField(default=0)
+    cant_trabajadores       = models.IntegerField(default=0)
+    gasto_total_mensual     = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return self.user.username
+
+class Cliente_convenio(models.Model):
+    user            = models.ForeignKey(User, on_delete=models.CASCADE)
+    empresa         = models.ForeignKey(Empresa_convenio, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.user.username
+
+'''
 #crear tabla:
 # Empresa_convenio (direccion_entrega, monto_cargar_saldo, num_trabajadores)
 # Cliente_empresa_convenio (id_empresa, id_cliente) #para saber que clientes tienen convenio
